@@ -63,10 +63,12 @@ with st.sidebar:
     st.write("")
     st.write("")
     st.write("")
+    st.write("")
+    st.write("")
 
     # Voeg laatst geupdate datum toe
-    st.write("Laatste update:")
-    st.write("23 sep 2025")
+    st.write("Voor het laatst geupdate op:")
+    st.write("23:39 - 23 sep 2025")
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
