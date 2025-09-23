@@ -7,15 +7,26 @@ import plotly.express as px
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
 # Sidebar menu
-page = st.sidebar.selectbox("Selecteer een pagina", ["Home", "Dashboard", "Page 2", "Page 3", "Page 4"])
+page = st.sidebar.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "Data Analyse", "Page blank"])
 
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
-if page == "Home":
-    st.title("🏠 Home Page - Passagiers Tevredenheid voor KLM")
+if page == "Overzicht":
+    # Maak twee kolommen: 1 voor het logo, 1 voor de titel
+    col1, col2 = st.columns([1, 5])  # verhouding: 1 voor logo, 5 voor titel
+
+    with col1:
+        st.image("klm_logo.png", width=80)  # Zorg dat het logobestand in dezelfde map staat
+
+    with col2:
+        st.markdown("<h1 style='margin-top: 20px;'>🏠 Overzicht - Klanttevredenheid KLM</h1>", unsafe_allow_html=True)
+
+    # Introductie tekst onder de titel
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
     st.write("Gebruik het dropdown menu om een pagina te bezoeken.")
+#-------------------page 2-----------------------------
+#-------------------------------------------------------
 
 elif page == "Dashboard":
     st.title("📊 Dashboard klanttevredenheid KLM")
@@ -68,20 +79,16 @@ elif page == "Dashboard":
 
     st.plotly_chart(fig, use_container_width=True)
 
-#-------------------page 2-----------------------------
-#-------------------------------------------------------
-elif page == "Page 2":
-    st.title("📝 Page 2 - Reports")
-    st.write("This is Page 2 content.")
-
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
-elif page == "Page 3":
-    st.title("⚙️ Page 3 - Settings")
-    st.write("This is Page 3 content.")
+elif page == "Data Analyse":
+    st.title("📝 Data Analyse")
+    st.write("text.")
 
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
-elif page == "Page 4":
-    st.title("📌 Page 4 - Notes")
-    st.write("This is Page 4 content.")
+elif page == "Page blank":
+    st.title("⚙️ Page blank")
+    st.write("text.")
+
+
