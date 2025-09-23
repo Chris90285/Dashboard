@@ -26,21 +26,22 @@ df_extra = load_extra_data()
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
-import streamlit as st
+# Zorg dat er altijd een default waarde is
+if "stijl" not in st.session_state:
+    st.session_state["stijl"] = "KLM Blauw"
 
-# --- Sidebar ---
 with st.sidebar:
-    # Lees huidige stijl (als er nog geen waarde is, gebruik 'KLM Blauw' als default)
-    huidige_stijl = st.session_state.get("stijl", "KLM Blauw")
+    # Huidige stijl bepalen
+    huidige_stijl = st.session_state["stijl"]
     primary_color = "royalblue" if huidige_stijl == "KLM Blauw" else "goldenrod"
 
-    # Titel
+    # Titel bovenaan
     st.markdown(
         f"<h2 style='color:{primary_color}; margin: 0 0 8px 0;'>KLM Dashboard</h2>",
         unsafe_allow_html=True,
     )
 
-    # Radio button onder de titel (update st.session_state['stijl'] bij verandering)
+    # Radio button onder de titel
     st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], key="stijl")
 
     st.markdown("---")
@@ -56,6 +57,8 @@ with st.sidebar:
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
+stijl = st.session_state["stijl"]  # veilige kopie uit session_state
+
 if stijl == "KLM Blauw":
     primary_color = "royalblue"
     secondary_color = "orange"
