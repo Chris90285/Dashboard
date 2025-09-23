@@ -43,7 +43,7 @@ if stijl == "KLM Blauw":
         {'range': [2,4], 'color': 'lightyellow'},
         {'range': [4,5], 'color': 'lightgreen'}
     ]
-else:  # Zonnig Geel
+else:  # Geel
     primary_color = "goldenrod"
     secondary_color = "darkorange"
     gauge_steps = [
@@ -57,7 +57,8 @@ else:  # Zonnig Geel
 if page == "Snel Overzicht":
     st.sidebar.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
-    st.title("📊 Snel Overzicht - Klanttevredenheid KLM")
+    # Titel in thema-kleur
+    st.markdown(f"<h1 style='color:{primary_color}'>📊 Snel Overzicht - Klanttevredenheid KLM</h1>", unsafe_allow_html=True)
     st.write("")
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
@@ -181,7 +182,7 @@ if page == "Snel Overzicht":
 #-------------------page 2-----------------------------
 #-------------------------------------------------------
 elif page == "Dashboard":
-    st.title("📊 Dashboard klanttevredenheid KLM")
+    st.markdown(f"<h1 style='color:{primary_color}'>📊 Dashboard klanttevredenheid KLM</h1>", unsafe_allow_html=True)
     st.write("Filter hier op vertraagde vluchten.")
 
     st.markdown("### ✈️ Vertragingfilters")
@@ -218,13 +219,17 @@ elif page == "Dashboard":
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
 elif page == "Data Overzicht":
-    st.title("✎ Data Overzicht")
+    st.markdown(f"<h1 style='color:{primary_color}'>✎ Data Overzicht</h1>", unsafe_allow_html=True)
     st.write("Op deze pagina zijn alle gebruikte datasets te zien.")
     st.write("Hieronder is het  dataframe 'airline_passenger_satisfaction.csv' te zien.")
     # Main dataframe laten zien
     st.dataframe(df)
     st.write("Bron: Ahmad Bhat, M. (n.d.). Airline passenger satisfaction [Data set]. Kaggle.")
     st.write("https://www.kaggle.com/datasets/mysarahmadbhat/airline-passenger-satisfaction")
+    
+    # Witregels
+    st.write("")
+    st.write("")
 
     st.write("Hieronder is het dataframe 'airlines_flights_data.csv' te zien.")
     # Extra dataframe laten zien
@@ -235,6 +240,5 @@ elif page == "Data Overzicht":
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
 elif page == "Werkwijze":
-    st.title("✎ Werkwijze")
+    st.markdown(f"<h1 style='color:{primary_color}'>✎ Werkwijze</h1>", unsafe_allow_html=True)
     st.write("Hier komt een beschrijving van hoe wij te werk zijn gegaan.")
-
