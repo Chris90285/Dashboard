@@ -26,24 +26,29 @@ df_extra = load_extra_data()
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
-with st.sidebar:
+import streamlit as st
 
-    # Eerst tijdelijke stijl instellen voor kleur van de titel
-    stijl_temp = st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], index=0)
-    if stijl_temp == "KLM Blauw":
+with st.sidebar:
+    # Eerst de radiobutton voor stijl
+    stijl = st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], index=0)
+
+    # Kleur bepalen
+    if stijl == "KLM Blauw":
         primary_color = "royalblue"
     else:
         primary_color = "goldenrod"
-    
-    # Nu definitieve stijl kiezen (voor rest van app)
-    stijl = stijl_temp
 
-    # Dashboard titel
-    st.markdown(f"<h3 style='color:{primary_color}'>KLM Dashboard</h3>", unsafe_allow_html=True)
+    # Dashboard titel BOVEN de radiobutton zetten
+    st.markdown(f"<h3 style='color:{primary_color}; margin-bottom: 0;'>KLM Dashboard</h3>", unsafe_allow_html=True)
 
-    # Lijn neerzetten
+    # Scheidingslijn
     st.markdown("---")  
-    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
+
+    # Pagina keuze
+    page = st.selectbox(
+        "Selecteer een pagina", 
+        ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"]
+    )
 
     # Witregel
     st.write("")
