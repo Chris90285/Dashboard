@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-#-------------------data inladen------------------------
+#-------------------data inladen-----------------------
 #-------------------------------------------------------
 @st.cache_data
 def load_data():
@@ -14,22 +14,22 @@ def load_data():
     df["Total Delay"] = df["Departure Delay"].fillna(0) + df["Arrival Delay"].fillna(0)
     return df
 
-df = load_data()
+df = load_data()  # nu overal beschikbaar
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
-# Sidebar menu
 page = st.sidebar.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "Data Analyse", "Page blank"])
 
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
 if page == "Overzicht":
     # Logo in sidebar
-    st.sidebar.image("klm_logo.png", use_container_width=True)
+    st.sidebar.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
     # Titel
-    st.title("🏠 Overzicht - Klanttevredenheid KLM")
-
+    st.title("Overzicht - Klanttevredenheid KLM")
+    # Witregel
+    st.write("")
     # Introductie tekst onder de titel
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
@@ -51,7 +51,7 @@ if page == "Overzicht":
     avg_arr_delay = df["Arrival Delay"].mean()
 
     # ======================
-    # Visualisaties
+    # Visualisaties (2x2 grid)
     # ======================
     col1, col2 = st.columns(2)
 
@@ -62,8 +62,9 @@ if page == "Overzicht":
             value=total_passengers,
             title={"text": "Totaal Passagiers"}
         ))
-        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig1, use_container_width=True, key="fig1")
 
+    with col2:
         # KPI avg satisfaction (gauge 0-5)
         fig2 = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -80,9 +81,11 @@ if page == "Overzicht":
                 ],
             }
         ))
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True, key="fig2")
 
-    with col2:
+    col3, col4 = st.columns(2)
+
+    with col3:
         # KPI avg departure delay
         fig3 = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -93,8 +96,9 @@ if page == "Overzicht":
                 'bar': {'color': "orange"},
             }
         ))
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, use_container_width=True, key="fig3")
 
+    with col4:
         # KPI avg arrival delay
         fig4 = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -105,7 +109,7 @@ if page == "Overzicht":
                 'bar': {'color': "red"},
             }
         ))
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, use_container_width=True, key="fig4")
 
 #-------------------page 2-----------------------------
 #-------------------------------------------------------
@@ -119,15 +123,15 @@ elif page == "Dashboard":
     delay_60 = st.checkbox("Filter op vertraagde vluchten (>60 minuten vertraging)")
 
     # Pas filters toe
-    filtered_df = df.copy()
+    df_filtered = df.copy()
     if delay_30:
-        filtered_df = filtered_df[filtered_df["Total Delay"] > 30]
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 30]
 
     if delay_60:
-        filtered_df = filtered_df[filtered_df["Total Delay"] > 60]
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 60]
 
     # Groeperen
-    agg = filtered_df.groupby(["Customer Type", "Type of Travel", "Satisfaction"]).size().reset_index(name="count")
+    agg = df_filtered.groupby(["Customer Type", "Type of Travel", "Satisfaction"]).size().reset_index(name="count")
 
     # Maak een gecombineerde X-label (CustomerType + TravelType)
     agg["Group"] = agg["Customer Type"] + " - " + agg["Type of Travel"]
