@@ -55,6 +55,19 @@ with st.sidebar:
     # Afbeelding
     st.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
+    # witregels
+    st.write("") 
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+
+    # Voeg laatst geupdate datum toe
+    st.write("Laatste update:")
+    st.write("23 sep 2025")
+
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
 stijl = st.session_state["stijl"]  # veilige kopie uit session_state
