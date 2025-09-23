@@ -28,34 +28,30 @@ df_extra = load_extra_data()
 #-------------------------------------------------------
 import streamlit as st
 
+# --- Sidebar ---
 with st.sidebar:
-    # Eerst de radiobutton voor stijl
-    stijl = st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], index=0)
+    # Lees huidige stijl (als er nog geen waarde is, gebruik 'KLM Blauw' als default)
+    huidige_stijl = st.session_state.get("stijl", "KLM Blauw")
+    primary_color = "royalblue" if huidige_stijl == "KLM Blauw" else "goldenrod"
 
-    # Kleur bepalen
-    if stijl == "KLM Blauw":
-        primary_color = "royalblue"
-    else:
-        primary_color = "goldenrod"
-
-# Titel bovenaan sidebar tonen (na keuze kleur)
-st.sidebar.markdown(
-    f"<h2 style='color:{primary_color}; margin-top: 0;'>KLM Dashboard</h2>",
-    unsafe_allow_html=True
-)
-
-with st.sidebar:
-    st.markdown("---")  
-
-    # Pagina keuze
-    page = st.selectbox(
-        "Selecteer een pagina", 
-        ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"]
+    # Titel
+    st.markdown(
+        f"<h2 style='color:{primary_color}; margin: 0 0 8px 0;'>KLM Dashboard</h2>",
+        unsafe_allow_html=True,
     )
 
-    st.write("")  # witregel
+    # Radio button onder de titel (update st.session_state['stijl'] bij verandering)
+    st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], key="stijl")
 
-    # Sidebar afbeelding
+    st.markdown("---")
+
+    # overige sidebar-elementen
+    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
+
+    # witregel
+    st.write("")  
+
+    # Afbeelding
     st.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
 #-------------------stijlinstellingen-------------------
