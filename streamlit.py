@@ -24,6 +24,22 @@ def load_extra_data():
 
 df_extra = load_extra_data()
 
+#-------------------sidebar-----------------------------
+#-------------------------------------------------------
+with st.sidebar:
+    # Stijlmodus eerst definiëren
+    stijl = st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], index=0)
+    
+    # Sidebar titel met kleur
+    if stijl == "KLM Blauw":
+        primary_color = "royalblue"
+    else:
+        primary_color = "goldenrod"
+    st.markdown(f"<h3 style='color:{primary_color}'>KLM Dashboard</h3>", unsafe_allow_html=True)
+
+    st.markdown("---")  
+    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
+
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
 if stijl == "KLM Blauw":
@@ -42,16 +58,6 @@ else:  # Geel
         {'range': [2,4], 'color': 'gold'},
         {'range': [4,5], 'color': 'lightyellow'}
     ]
-
-#-------------------sidebar-----------------------------
-#-------------------------------------------------------
-
-with st.sidebar:
-    st.markdown(f"<h3 style='color:{primary_color}'>KLM Dashboard</h3>", unsafe_allow_html=True)
-    # Stijlmodus
-    stijl = st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], index=0)
-    st.markdown("---")  
-    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
 
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
@@ -193,7 +199,6 @@ if page == "Snel Overzicht":
         ))
         st.plotly_chart(fig4, use_container_width=True)
 
-
 #-------------------page 2-----------------------------
 #-------------------------------------------------------
 elif page == "Dashboard":
@@ -237,25 +242,5 @@ elif page == "Data Overzicht":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Data Overzicht</h1>", unsafe_allow_html=True)
     st.write("Op deze pagina zijn alle gebruikte datasets te zien.")
     st.write("Hieronder is het  dataframe 'airline_passenger_satisfaction.csv' te zien.")
-    # Main dataframe laten zien
     st.dataframe(df)
-    st.write("Bron: Ahmad Bhat, M. (n.d.). Airline passenger satisfaction [Data set]. Kaggle.")
-    st.write("https://www.kaggle.com/datasets/mysarahmadbhat/airline-passenger-satisfaction")
-    
-    # Witregels
-    st.write("")
-    st.write("")
-    st.write("")
-    st.write("")
-
-    st.write("Hieronder is het dataframe 'airlines_flights_data.csv' te zien.")
-    # Extra dataframe laten zien
-    st.dataframe(df_extra)
-    st.write("Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.")
-    st.write("https://www.kaggle.com/datasets/rohitgrewal/airlines-flights-data")
-
-#-------------------page 4-----------------------------
-#-------------------------------------------------------
-elif page == "Werkwijze":
-    st.markdown(f"<h1 style='color:{primary_color}'>✎ Werkwijze</h1>", unsafe_allow_html=True)
-    st.write("Hier komt een beschrijving van hoe wij te werk zijn gegaan.")
+    st.write("Bron: Ahmad Bhat, M.
