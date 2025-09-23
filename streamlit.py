@@ -7,16 +7,18 @@ import plotly.express as px
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
 # Sidebar menu
-page = st.sidebar.selectbox("Select a page", ["Home", "Page 1", "Page 2", "Page 3", "Page 4"])
+page = st.sidebar.selectbox("Selecteer een pagina", ["Home", "Dashboard", "Page 2", "Page 3", "Page 4"])
 
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
 if page == "Home":
-    st.title("🏠 Home Page")
-    st.write("Welcome to the home page!")
+    st.title("🏠 Home Page - Passagiers Tevredenheid voor KLM")
+    st.markdown("**Welkom!**")
+    st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
+    st.write("Gebruik het dropdown menu om een pagina te bezoeken.")
 
-elif page == "Page 1":
-    st.title("📊 Page 1 - Analytics")
+elif page == "Dashboard":
+    st.title("📊 Dashboard klanttevredenheid KLM")
     st.write("This is Page 1 content.")
 
     #---------------------grafiek 1----------------------------------
