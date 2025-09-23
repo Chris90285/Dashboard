@@ -13,7 +13,7 @@ page = st.sidebar.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "
 #-------------------------------------------------------
 if page == "Overzicht":
     # Logo rechtsboven
-    st.image("klm_logo.png", width=150)  # maak het groter, pas width aan naar wens
+    st.image("a321neo_profile_right", width=150)  # maak het groter, pas width aan naar wens
 
     # Titel
     st.title("🏠 Overzicht - Klanttevredenheid KLM")
