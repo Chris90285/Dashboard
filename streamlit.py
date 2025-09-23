@@ -18,11 +18,11 @@ df = load_data()
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
 with st.sidebar:
-    st.markdown("### 🌍 KLM Dashboard") 
+    st.markdown("### KLM Dashboard") 
     # Stijlmodus
-    stijl = st.radio("Kies een stijlmodus:", ["KLM Blauw", "Zonnig Geel"], index=0)
+    stijl = st.radio("Kies een stijl:", ["KLM Blauw", "Geel"], index=0)
     st.markdown("---")  
-    page = st.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "Data Analyse", "Page blank"])
+    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
@@ -45,10 +45,10 @@ else:  # Zonnig Geel
 
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
-if page == "Overzicht":
+if page == "Snel Overzicht":
     st.sidebar.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
-    st.title("Overzicht - Klanttevredenheid KLM")
+    st.title("📊 Snel Overzicht - Klanttevredenheid KLM")
     st.write("")
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
@@ -208,13 +208,15 @@ elif page == "Dashboard":
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
-elif page == "Data Analyse":
-    st.title("📝 Data Analyse")
-    st.write("text.")
+elif page == "Data Overzicht":
+    st.title("✎ Data Overzicht")
+    st.write("Hieronder is het gehele dataframe te zien.")
+    # Dataframe laten zien
+    st.dataframe(df)
 
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
-elif page == "Page blank":
-    st.title("⚙️ Page blank")
-    st.write("text.")
+elif page == "Werkwijze":
+    st.title("✎ Werkwijze")
+    st.write("Hier komt een beschrijving van hoe wij te werk zijn gegaan.")
 
