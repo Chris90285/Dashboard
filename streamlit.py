@@ -5,6 +5,17 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+#-------------------data inladen------------------------
+#-------------------------------------------------------
+@st.cache_data
+def load_data():
+    df = pd.read_csv("airline_passenger_satisfaction.csv")
+    # Maak total delay
+    df["Total Delay"] = df["Departure Delay"].fillna(0) + df["Arrival Delay"].fillna(0)
+    return df
+
+df = load_data()
+
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
 # Sidebar menu
@@ -98,35 +109,25 @@ if page == "Overzicht":
 
 #-------------------page 2-----------------------------
 #-------------------------------------------------------
-
 elif page == "Dashboard":
     st.title("📊 Dashboard klanttevredenheid KLM")
     st.write("This is Page 1 content.")
 
     #---------------------grafiek 1----------------------------------
-    # Load data (cached)
-    @st.cache_data
-    def load_data():
-        df = pd.read_csv("airline_passenger_satisfaction.csv")
-        # Maak total delay
-        df["Total Delay"] = df["Departure Delay"].fillna(0) + df["Arrival Delay"].fillna(0)
-        return df
-
-    df = load_data()
-
     # Checkbox voor delay filter
     delay_30 = st.checkbox("Filter op vertraagde vluchten (>30 minuten vertraging)")
     delay_60 = st.checkbox("Filter op vertraagde vluchten (>60 minuten vertraging)")
 
     # Pas filters toe
+    filtered_df = df.copy()
     if delay_30:
-        df = df[df["Total Delay"] > 30]
+        filtered_df = filtered_df[filtered_df["Total Delay"] > 30]
 
     if delay_60:
-        df = df[df["Total Delay"] > 60]
+        filtered_df = filtered_df[filtered_df["Total Delay"] > 60]
 
     # Groeperen
-    agg = df.groupby(["Customer Type", "Type of Travel", "Satisfaction"]).size().reset_index(name="count")
+    agg = filtered_df.groupby(["Customer Type", "Type of Travel", "Satisfaction"]).size().reset_index(name="count")
 
     # Maak een gecombineerde X-label (CustomerType + TravelType)
     agg["Group"] = agg["Customer Type"] + " - " + agg["Type of Travel"]
@@ -161,5 +162,3 @@ elif page == "Data Analyse":
 elif page == "Page blank":
     st.title("⚙️ Page blank")
     st.write("text.")
-
-
