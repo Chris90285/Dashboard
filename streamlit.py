@@ -14,7 +14,7 @@ def load_data():
     df["Total Delay"] = df["Departure Delay"].fillna(0) + df["Arrival Delay"].fillna(0)
     return df
 
-df = load_data()  # nu overal beschikbaar
+df = load_data()
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
@@ -44,7 +44,9 @@ if page == "Overzicht":
     # ======================
     # Extra filtersectie - Afhankelijke sliders
     # ======================
-    st.markdown("### 🎚️ Leeftijdsfilter")
+    st.markdown("###  Leeftijdsfilter")
+    st.write("Pas hier de minimale en maximale leeftijd aan.")
+    st.write("Let op! Zorg dat de maximale leeftijd niet kleiner is dan de minimale leeftijd!")
 
     col_min, col_max = st.columns(2)
     with col_min:
@@ -152,20 +154,26 @@ if page == "Overzicht":
 #-------------------------------------------------------
 elif page == "Dashboard":
     st.title("📊 Dashboard klanttevredenheid KLM")
-    st.write("This is Page 1 content.")
+    st.write("Filter hier op vertraagde vluchten.")
 
     #---------------------grafiek 1----------------------------------
     # Checkbox voor delay filter
-    delay_30 = st.checkbox("Filter op vertraagde vluchten (>30 minuten vertraging)")
-    delay_60 = st.checkbox("Filter op vertraagde vluchten (>60 minuten vertraging)")
+    st.markdown("### ✈️ Vertragingfilters")
+    delay_30 = st.checkbox("Alleen vertraagde vluchten (>30 minuten vertraging)")
+    delay_60 = st.checkbox("Alleen zwaar vertraagde vluchten (>60 minuten vertraging)")
 
-    # Pas filters toe
+    # Fool proof filter
     df_filtered = df.copy()
-    if delay_30:
-        df_filtered = df_filtered[df_filtered["Total Delay"] > 30]
 
-    if delay_60:
+    if delay_30 and delay_60:
+        st.warning("⚠️ Beide filters geselecteerd. De strengste filter (>60 minuten) is toegepast.")
         df_filtered = df_filtered[df_filtered["Total Delay"] > 60]
+    elif delay_30:
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 30]
+    elif delay_60:
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 60]
+    else:
+        st.info("ℹ️ Geen filter geselecteerd. Alle vluchten worden getoond.")
 
     # Groeperen
     agg = df_filtered.groupby(["Customer Type", "Type of Travel", "Satisfaction"]).size().reset_index(name="count")
@@ -191,6 +199,7 @@ elif page == "Dashboard":
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
