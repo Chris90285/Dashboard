@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 
 #-------------------data inladen-----------------------
 #-------------------------------------------------------
+#Main data set
 @st.cache_data
 def load_data():
     df = pd.read_csv("airline_passenger_satisfaction.csv")
@@ -14,6 +15,14 @@ def load_data():
     return df
 
 df = load_data()
+
+#Extra data set
+@st.cache_data
+def load_extra_data():
+    df_extra = pd.read_csv("airlines_flights_data.csv")
+    return df_extra
+
+df_extra = load_extra_data()
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
@@ -210,9 +219,18 @@ elif page == "Dashboard":
 #-------------------------------------------------------
 elif page == "Data Overzicht":
     st.title("✎ Data Overzicht")
-    st.write("Hieronder is het gehele dataframe te zien.")
-    # Dataframe laten zien
+    st.write("Op deze pagina zijn alle gebruikte datasets te zien.")
+    st.write("Hieronder is het  dataframe 'airline_passenger_satisfaction.csv' te zien.")
+    # Main dataframe laten zien
     st.dataframe(df)
+    st.write("Bron: Ahmad Bhat, M. (n.d.). Airline passenger satisfaction [Data set]. Kaggle.")
+    st.write("https://www.kaggle.com/datasets/mysarahmadbhat/airline-passenger-satisfaction")
+
+    st.write("Hieronder is het dataframe 'airlines_flights_data.csv' te zien.")
+    # Extra dataframe laten zien
+    st.dataframe(df_extra)
+    st.write("Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.")
+    st.write("https://www.kaggle.com/datasets/rohitgrewal/airlines-flights-data")
 
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
