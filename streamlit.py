@@ -40,20 +40,52 @@ if page == "Overzicht":
     st.markdown("**Snel overzicht**")
     st.write("Hieronder zijn een aantal simpele KPI's (Key Performance Indicators) te zien.")
     st.write("Klik op de afbeeldingen om ze beter te bekijken.")
+
     # ======================
-    # KPI berekeningen
+    # Extra filtersectie - Afhankelijke sliders
     # ======================
-    total_passengers = df["ID"].nunique()
+    st.markdown("### 🎚️ Leeftijdsfilter")
+
+    col_min, col_max = st.columns(2)
+    with col_min:
+        min_age = st.slider(
+            "Minimum leeftijd",
+            int(df["Age"].min()),
+            int(df["Age"].max()),
+            int(df["Age"].min()),
+            key="min_age_slider"
+        )
+    with col_max:
+        max_age = st.slider(
+            "Maximum leeftijd",
+            int(df["Age"].min()),
+            int(df["Age"].max()),
+            int(df["Age"].max()),
+            key="max_age_slider"
+        )
+
+    # Zorg dat de sliders logisch aan elkaar gekoppeld zijn
+    if min_age > max_age:
+        st.warning("⚠️ Minimum leeftijd kan niet groter zijn dan maximum. Waarden zijn aangepast.")
+        min_age, max_age = max_age, min_age
+
+    # Filter de data op leeftijd
+    df_filtered = df[(df["Age"] >= min_age) & (df["Age"] <= max_age)]
+
+    # ======================
+    # KPI berekeningen (nu op df_filtered)
+    # ======================
+    total_passengers = df_filtered["ID"].nunique()
 
     satisfaction_cols = [
         "On-board Service", "Seat Comfort", "Leg Room Service", "Cleanliness",
         "Food and Drink", "In-flight Service", "In-flight Wifi Service",
         "In-flight Entertainment", "Baggage Handling"
     ]
-    avg_satisfaction = df[satisfaction_cols].mean().mean()
+    avg_satisfaction = df_filtered[satisfaction_cols].mean().mean()
 
-    avg_dep_delay = df["Departure Delay"].mean()
-    avg_arr_delay = df["Arrival Delay"].mean()
+    avg_dep_delay = df_filtered["Departure Delay"].mean()
+    avg_arr_delay = df_filtered["Arrival Delay"].mean()
 
     # ======================
     # Visualisaties (2x2 grid)
