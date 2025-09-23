@@ -12,19 +12,19 @@ page = st.sidebar.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
 if page == "Overzicht":
-    # Maak twee kolommen: 1 voor het logo, 1 voor de titel
-    col1, col2 = st.columns([1, 5])  # verhouding: 1 voor logo, 5 voor titel
-
-    with col1:
-        st.image("klm_logo.png", width=80)  # Zorg dat het logobestand in dezelfde map staat
-
-    with col2:
-        st.markdown("<h1 style='margin-top: 20px;'>🏠 Overzicht - Klanttevredenheid KLM</h1>", unsafe_allow_html=True)
+    # Logo rechts van de titel, verticaal uitgelijnd
+    st.markdown("""
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h1 style="margin: 0;">🏠 Overzicht - Klanttevredenheid KLM</h1>
+        <img src="klm_logo.png" style="height: 60px; object-fit: contain;">
+    </div>
+    """, unsafe_allow_html=True)
 
     # Introductie tekst onder de titel
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
     st.write("Gebruik het dropdown menu om een pagina te bezoeken.")
+
 #-------------------page 2-----------------------------
 #-------------------------------------------------------
 
