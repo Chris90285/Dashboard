@@ -27,8 +27,8 @@ df_extra = load_extra_data()
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
 with st.sidebar:
-    # Sidebar afbeelding
-    st.image("Vertrekbord Team HV0009.png", use_container_width=True)
+    # Dashboard titel
+    st.markdown(f"<h3 style='color:{primary_color}'>KLM Dashboard</h3>", unsafe_allow_html=True)
 
     # Sidebar titel boven thema-keuze (kleur volgt thema)
     # Eerst tijdelijke stijl instellen voor kleur van de titel
@@ -37,14 +37,18 @@ with st.sidebar:
         primary_color = "royalblue"
     else:
         primary_color = "goldenrod"
-    st.markdown(f"<h3 style='color:{primary_color}'>KLM Dashboard</h3>", unsafe_allow_html=True)
-
+    
     # Nu definitieve stijl kiezen (voor rest van app)
     stijl = stijl_temp
 
     st.markdown("---")  
     page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
 
+    # Witregel
+    st.write("")
+
+    # Sidebar afbeelding
+    st.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
