@@ -3,6 +3,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
@@ -12,8 +13,8 @@ page = st.sidebar.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
 if page == "Overzicht":
-    # Logo rechtsboven
-    st.image("a321neo_profile_right.png", width=150)  # maak het groter, pas width aan naar wens
+    # Logo in sidebar
+    st.sidebar.image("klm_logo.png", use_container_width=True)
 
     # Titel
     st.title("🏠 Overzicht - Klanttevredenheid KLM")
@@ -23,6 +24,77 @@ if page == "Overzicht":
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
     st.write("Gebruik het dropdown menu om een pagina te bezoeken.")
 
+    # ======================
+    # KPI berekeningen
+    # ======================
+    total_passengers = df["ID"].nunique()
+
+    satisfaction_cols = [
+        "On-board Service", "Seat Comfort", "Leg Room Service", "Cleanliness",
+        "Food and Drink", "In-flight Service", "In-flight Wifi Service",
+        "In-flight Entertainment", "Baggage Handling"
+    ]
+    avg_satisfaction = df[satisfaction_cols].mean().mean()
+
+    avg_dep_delay = df["Departure Delay"].mean()
+    avg_arr_delay = df["Arrival Delay"].mean()
+
+    # ======================
+    # Visualisaties
+    # ======================
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # KPI totaal passagiers
+        fig1 = go.Figure(go.Indicator(
+            mode="number",
+            value=total_passengers,
+            title={"text": "Totaal Passagiers"}
+        ))
+        st.plotly_chart(fig1, use_container_width=True)
+
+        # KPI avg satisfaction (gauge 0-5)
+        fig2 = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=avg_satisfaction,
+            domain={'x': [0, 1], 'y': [0, 1]},
+            title={'text': "Gem. Tevredenheid (0-5)"},
+            gauge={
+                'axis': {'range': [0, 5]},
+                'bar': {'color': "royalblue"},
+                'steps': [
+                    {'range': [0, 2], 'color': "lightcoral"},
+                    {'range': [2, 4], 'color': "lightyellow"},
+                    {'range': [4, 5], 'color': "lightgreen"}
+                ],
+            }
+        ))
+        st.plotly_chart(fig2, use_container_width=True)
+
+    with col2:
+        # KPI avg departure delay
+        fig3 = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=avg_dep_delay,
+            title={'text': "Gem. Vertrekvertraging (min)"},
+            gauge={
+                'axis': {'range': [0, max(60, avg_dep_delay*2)]},
+                'bar': {'color': "orange"},
+            }
+        ))
+        st.plotly_chart(fig3, use_container_width=True)
+
+        # KPI avg arrival delay
+        fig4 = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=avg_arr_delay,
+            title={'text': "Gem. Aankomstvertraging (min)"},
+            gauge={
+                'axis': {'range': [0, max(60, avg_arr_delay*2)]},
+                'bar': {'color': "red"},
+            }
+        ))
+        st.plotly_chart(fig4, use_container_width=True)
 
 #-------------------page 2-----------------------------
 #-------------------------------------------------------
