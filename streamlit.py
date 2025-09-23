@@ -33,8 +33,13 @@ if page == "Overzicht":
     # Introductie tekst onder de titel
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
-    st.write("Gebruik het dropdown menu om een pagina te bezoeken.")
-
+    st.write("Gebruik het dropdown menu om de verschillende pagina's te bezoeken.")
+    # Witregel
+    st.write("")
+    # Introductie tekst onder de titel
+    st.markdown("**Snel overzicht**")
+    st.write("Hieronder zijn een aantal simpele KPI's (Key Performance Indicators) te zien.")
+    st.write("Klik op de afbeeldingen om ze beter te bekijken.")
     # ======================
     # KPI berekeningen
     # ======================
