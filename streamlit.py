@@ -79,7 +79,6 @@ else:  # Geel
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
 if page == "Snel Overzicht":
-    st.sidebar.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
     # Titel in thema-kleur
     st.markdown(f"<h1 style='color:{primary_color}'>📊 Snel Overzicht - Klanttevredenheid KLM</h1>", unsafe_allow_html=True)
