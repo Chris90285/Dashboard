@@ -38,10 +38,13 @@ with st.sidebar:
     else:
         primary_color = "goldenrod"
 
-    # Dashboard titel BOVEN de radiobutton zetten
-    st.markdown(f"<h3 style='color:{primary_color}; margin-bottom: 0;'>KLM Dashboard</h3>", unsafe_allow_html=True)
+# Titel bovenaan sidebar tonen (na keuze kleur)
+st.sidebar.markdown(
+    f"<h2 style='color:{primary_color}; margin-top: 0;'>KLM Dashboard</h2>",
+    unsafe_allow_html=True
+)
 
-    # Scheidingslijn
+with st.sidebar:
     st.markdown("---")  
 
     # Pagina keuze
@@ -50,8 +53,7 @@ with st.sidebar:
         ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"]
     )
 
-    # Witregel
-    st.write("")
+    st.write("")  # witregel
 
     # Sidebar afbeelding
     st.image("Vertrekbord Team HV0009.png", use_container_width=True)
