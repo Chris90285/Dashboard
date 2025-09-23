@@ -19,7 +19,7 @@ df = load_data()
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
 with st.sidebar:
-    st.markdown("### 🌍 KLM Dashboard")   # Kleine titel bovenaan
+    st.markdown("### KLM Dashboard")   # Kleine titel bovenaan
     
     # Theme switcher
     theme = st.radio("Kies een thema:", ["Licht", "Donker"], index=0)
@@ -207,7 +207,7 @@ elif page == "Dashboard":
         barmode="group",
         text_auto=True,
         title="Satisfaction per Customer Type en Type of Travel",
-        color_discrete_sequence
+        color_discrete_sequence)
 
 
 #-------------------page 3-----------------------------
