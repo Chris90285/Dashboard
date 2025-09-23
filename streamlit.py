@@ -21,24 +21,28 @@ df = load_data()
 with st.sidebar:
     st.markdown("### 🌍 KLM Dashboard")   # Kleine titel bovenaan
     
-    # Theme switcher (werkt via Python-logica, geen HTML)
+    # Theme switcher
     theme = st.radio("Kies een thema:", ["Licht", "Donker"], index=0)
 
     # Scheiding
     st.markdown("---")  
     page = st.selectbox("Selecteer een pagina", ["Overzicht", "Dashboard", "Data Analyse", "Page blank"])
 
-# Kleuren afhankelijk van theme
-if theme == "Light":
-    primary_color = "royalblue"
-    secondary_color = "orange"
-    text_color = "black"
-    gauge_steps = [
-        {'range': [0, 2], 'color': "lightcoral"},
-        {'range': [2, 4], 'color': "lightyellow"},
-        {'range': [4, 5], 'color': "lightgreen"}
-    ]
-else:
+#-------------------HTML/CSS Theme Switch-----------------
+if theme == "Donker":
+    st.markdown(
+        """
+        <style>
+        /* Background */
+        .css-18e3th9 {background-color: #0e1117;}
+        .css-1d391kg {background-color: #0e1117;}
+        /* Sidebar */
+        .css-1d391kg, .css-hi6a2p {background-color: #1c1f26;}
+        /* Text */
+        .css-1d76goe, .css-1v3fvcr, .css-1v3fvcr p, .css-1d76goe p {color: #f5f5f5;}
+        </style>
+        """, unsafe_allow_html=True
+    )
     primary_color = "lightblue"
     secondary_color = "orange"
     text_color = "white"
@@ -47,14 +51,21 @@ else:
         {'range': [2, 4], 'color': "yellow"},
         {'range': [4, 5], 'color': "green"}
     ]
+else:
+    primary_color = "royalblue"
+    secondary_color = "orange"
+    text_color = "black"
+    gauge_steps = [
+        {'range': [0, 2], 'color': "lightcoral"},
+        {'range': [2, 4], 'color': "lightyellow"},
+        {'range': [4, 5], 'color': "lightgreen"}
+    ]
 
 #-------------------page 1-----------------------------
 #-------------------------------------------------------
 if page == "Overzicht":
-    # Logo in sidebar
     st.sidebar.image("Vertrekbord Team HV0009.png", use_container_width=True)
 
-    # Titel
     st.title("Overzicht - Klanttevredenheid KLM")
     st.write("")
     st.markdown("**Welkom!**")
@@ -94,7 +105,6 @@ if page == "Overzicht":
         st.warning("⚠️ Minimum leeftijd kan niet groter zijn dan maximum. Waarden zijn aangepast.")
         min_age, max_age = max_age, min_age
 
-    # Filter de data
     df_filtered = df[(df["Age"] >= min_age) & (df["Age"] <= max_age)]
 
     # ======================
@@ -131,11 +141,7 @@ if page == "Overzicht":
             value=avg_satisfaction,
             domain={'x': [0, 1], 'y': [0, 1]},
             title={'text': "Gem. Tevredenheid (0-5)"},
-            gauge={
-                'axis': {'range': [0, 5]},
-                'bar': {'color': primary_color},
-                'steps': gauge_steps
-            }
+            gauge={'axis': {'range': [0, 5]}, 'bar': {'color': primary_color}, 'steps': gauge_steps}
         ))
         st.plotly_chart(fig2, use_container_width=True, key="fig2")
 
@@ -144,21 +150,13 @@ if page == "Overzicht":
             mode="gauge+number",
             value=delayed_percentage,
             title={'text': "Vertraagde vluchten (%)"},
-            gauge={
-                'axis': {'range': [0, 100]},
-                'bar': {'color': secondary_color},
-                'steps': [
-                    {'range': [0, 30], 'color': "lightgreen"},
-                    {'range': [30, 60], 'color': "lightyellow"},
-                    {'range': [60, 100], 'color': "lightcoral"}
-                ]
-            },
+            gauge={'axis': {'range': [0, 100]}, 'bar': {'color': secondary_color},
+                   'steps': [{'range': [0,30],'color':'lightgreen'}, {'range':[30,60],'color':'lightyellow'}, {'range':[60,100],'color':'lightcoral'}]},
             number={'suffix': "%"}
         ))
         st.plotly_chart(fig5, use_container_width=True, key="fig5")
 
     col3, col4 = st.columns(2)
-
     with col3:
         fig3 = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -209,16 +207,8 @@ elif page == "Dashboard":
         barmode="group",
         text_auto=True,
         title="Satisfaction per Customer Type en Type of Travel",
-        color_discrete_sequence=[primary_color, "lightcoral"]
-    )
+        color_discrete_sequence
 
-    fig.update_layout(
-        xaxis_title="Customer Type & Type of Travel",
-        yaxis_title="Aantal passagiers",
-        legend_title="Satisfaction"
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
