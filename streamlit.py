@@ -23,13 +23,13 @@ df = load_data()
 
 # Checkbox voor delay filter
 delay_30 = st.checkbox("Filter op vertraagde vluchten (>30 minuten totaal)")
-
-if use_delay:
-    df = df[df["Total Delay"] > 30]
-
 delay_60 = st.checkbox("Filter op vertraagde vluchten (>60 minuten totaal)")
 
-if use_delay:
+# Pas filters toe
+if delay_30:
+    df = df[df["Total Delay"] > 30]
+
+if delay_60:
     df = df[df["Total Delay"] > 60]
 
 # Groeperen
