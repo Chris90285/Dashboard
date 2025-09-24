@@ -271,16 +271,16 @@ elif page == "Dashboard":
     #---------------------------------------------------------
 
 
-# Data inladen
+    # Data inladen
 
-st.title("Airline Satisfaction Dashboard")
+    st.title("Airline Satisfaction Dashboard")
 
-# Dropdown voor Class-selectie
-class_options = df["Class"].dropna().unique()
+    # Dropdown voor Class-selectie
+    class_options = df["Class"].dropna().unique()
 selected_class = st.selectbox("Kies een Class:", sorted(class_options))
 
-# Kolommen die we willen analyseren
-aspects = [
+    # Kolommen die we willen analyseren
+    aspects = [
     "Ease of Online booking", "Checkin service", "Online boarding",
     "Gate location", "On-board service", "Seat comfort",
     "Leg room service", "Cleanliness", "Food and drink",
@@ -288,23 +288,23 @@ aspects = [
     "Baggage handling"
 ]
 
-st.write("Kies de aspecten die je wilt zien:")
-selected_aspects = []
-for aspect in aspects:
-    if st.checkbox(aspect, value=True):  # standaard allemaal aangevinkt
+    st.write("Kies de aspecten die je wilt zien:")
+    selected_aspects = []
+    for aspect in aspects:
+       if st.checkbox(aspect, value=True):  # standaard allemaal aangevinkt
         selected_aspects.append(aspect)
 
-# Filter op gekozen class
-filtered_df = df[df["Class"] == selected_class]
+    # Filter op gekozen class
+    filtered_df = df[df["Class"] == selected_class]
 
-# Gemiddelden berekenen
-mean_values = filtered_df[selected_aspects].mean()
+    # Gemiddelden berekenen
+    mean_values = filtered_df[selected_aspects].mean()
 
-# Staafdiagram laten zien
-if not mean_values.empty:
+    # Staafdiagram laten zien
+    if not mean_values.empty:
     st.bar_chart(mean_values)
-else:
-    st.warning("Geen aspecten geselecteerd.")
+    else:
+        st.warning("Geen aspecten geselecteerd.")
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
