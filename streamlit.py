@@ -413,17 +413,20 @@ elif page == "Dashboard":
         st.plotly_chart(fig_box, use_container_width=True)
     #-------------------Grafiek Lieke-------------------------
     #---------------------------------------------------------
+    # Titel
+    st.title("Tevredenheid en vertraging")
 
-    # Kolommen die meegenomen worden voor de nieuwe rating
-    rating_cols = [
-        "Ease of Online Booking","Check-in Service","Online Boarding","Gate Location",
-        "On-board Service","Seat Comfort","Leg Room Service","Cleanliness",
-        "Food and Drink","In-flight Service","In-flight Wifi Service",
-        "In-flight Entertainment","Baggage Handling"
-    ]
-
-    # Nieuwe kolom 'rating' toevoegen
-    df["rating"] = df[rating_cols].mean(axis=1)
+    # ======================
+    # Rating maar één keer berekenen (beter in load_data())
+    # ======================
+    if "rating" not in df.columns:
+        rating_cols = [
+            "Ease of Online Booking","Check-in Service","Online Boarding","Gate Location",
+            "On-board Service","Seat Comfort","Leg Room Service","Cleanliness",
+            "Food and Drink","In-flight Service","In-flight Wifi Service",
+            "In-flight Entertainment","Baggage Handling"
+        ]
+        df["rating"] = df[rating_cols].mean(axis=1)
 
     # --- Leeftijdsfilter ---
     st.markdown("### Leeftijdsfilter")
@@ -447,13 +450,24 @@ elif page == "Dashboard":
     )
     min_dist, max_dist = distance_range
 
-    # Filter toepassen op leeftijd én afstand
+    # ======================
+    # Data filteren
+    # ======================
     filtered = df[
         (df["Age"] >= min_age) & (df["Age"] <= max_age) &
         (df["Flight Distance"] >= min_dist) & (df["Flight Distance"] <= max_dist)
     ]
 
+    # ======================
+    # Sampling toepassen bij grote datasets
+    # ======================
+    max_points = 10000
+    if len(filtered) > max_points:
+        filtered = filtered.sample(max_points, random_state=42)
+
+    # ======================
     # Scatterplot met Altair
+    # ======================
     scatter = (
         alt.Chart(filtered)
         .mark_circle(opacity=0.4)
@@ -476,6 +490,7 @@ elif page == "Dashboard":
     # Extra info tonen
     st.write(f"Geselecteerde leeftijdsrange: {min_age} - {max_age}")
     st.write(f"Geselecteerde vlucht afstand: {min_dist} - {max_dist}")
+
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
