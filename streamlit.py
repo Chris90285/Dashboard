@@ -466,7 +466,7 @@ elif page == "Dashboard":
         filtered = filtered.sample(max_points, random_state=42)
 
     # ======================
-    # Scatterplot met Altair
+    # Scatterplot met Altair (rating 0 = rood, 5 = groen)
     # ======================
     scatter = (
         alt.Chart(filtered)
@@ -474,7 +474,11 @@ elif page == "Dashboard":
         .encode(
             x=alt.X("Arrival Delay", title="Arrival Delay (minuten)"),
             y=alt.Y("Departure Delay", title="Departure Delay (minuten)"),
-            color=alt.Color("rating", scale=alt.Scale(scheme="turbo"), title="Average Rating"),
+            color=alt.Color(
+                "rating",
+                scale=alt.Scale(domain=[0, 5], range=["red", "yellow", "green"]),
+                title="Average Rating"
+            ),
             tooltip=["Age", "Flight Distance", "Arrival Delay", "Departure Delay", "rating"]
         )
         .properties(
