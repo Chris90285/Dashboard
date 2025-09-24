@@ -52,7 +52,7 @@ with st.sidebar:
     st.markdown("---")
 
     # overige sidebar-elementen
-    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard", "Data Overzicht", "Werkwijze"])
+    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard","Vliegtuig vs Trein" "Data Overzicht", "Werkwijze"])
 
     # witregel
     st.write("")  
@@ -495,8 +495,13 @@ elif page == "Dashboard":
     st.write(f"Geselecteerde leeftijdsrange: {min_age} - {max_age}")
     st.write(f"Geselecteerde vlucht afstand: {min_dist} - {max_dist}")
 
-
 #-------------------page 3-----------------------------
+#------------------------------------------------------
+elif page == "Vliegtuig vs Trein":
+    st.markdown(f"<h1 style='color:{primary_color}'>Tevredenheid vliegtuig vs trein</h1>", unsafe_allow_html=True)
+    st.write("Hier is een vergelijking gemaakt tussen de klanttevredenheid van vliegtuigen (KLM) en treinen in Japan.")
+
+#-------------------page 4-----------------------------
 #-------------------------------------------------------
 elif page == "Data Overzicht":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Data Overzicht</h1>", unsafe_allow_html=True)
@@ -519,7 +524,7 @@ elif page == "Data Overzicht":
     st.write("*Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.*")
     st.write("*https://www.kaggle.com/datasets/rohitgrewal/airlines-flights-data*")
 
-#-------------------page 4-----------------------------
+#-------------------page 5-----------------------------
 #-------------------------------------------------------
 elif page == "Werkwijze":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Werkwijze</h1>", unsafe_allow_html=True)
