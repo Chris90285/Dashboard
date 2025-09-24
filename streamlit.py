@@ -269,42 +269,47 @@ elif page == "Dashboard":
     st.plotly_chart(fig, use_container_width=True)
     #-------------------Grafiek Koen---------------------------
     #---------------------------------------------------------
-
-
-    # Data inladen
-
+    # Titel
     st.title("Airline Satisfaction Dashboard")
 
     # Dropdown voor Class-selectie
     class_options = df["Class"].dropna().unique()
     selected_class = st.selectbox("Kies een Class:", sorted(class_options))
 
+    # Filter voor vertraagde vluchten
+    delay_filter = st.checkbox("Toon alleen vertraagde vluchten ✈️", value=False)
+
     # Kolommen die we willen analyseren
     aspects = [
-    "Ease of Online booking", "Checkin service", "Online boarding",
-    "Gate location", "On-board service", "Seat comfort",
-    "Leg room service", "Cleanliness", "Food and drink",
-    "Inflight service", "Inflight wifi service", "Inflight entertainment",
-    "Baggage handling"
-]
+       "Ease of Online booking", "Checkin service", "Online boarding",
+        "Gate location", "On-board service", "Seat comfort",
+        "Leg room service", "Cleanliness", "Food and drink",
+        "Inflight service", "Inflight wifi service", "Inflight entertainment",
+        "Baggage handling"
+    ]
 
     st.write("Kies de aspecten die je wilt zien:")
     selected_aspects = []
     for aspect in aspects:
-       if st.checkbox(aspect, value=True):  # standaard allemaal aangevinkt
-        selected_aspects.append(aspect)
+        if st.checkbox(aspect, value=True):  # standaard allemaal aangevinkt
+            selected_aspects.append(aspect)
 
-    # Filter op gekozen class
+    # Data filteren op gekozen class
     filtered_df = df[df["Class"] == selected_class]
 
-    # Gemiddelden berekenen
-    mean_values = filtered_df[selected_aspects].mean()
+    # Extra filter op vertraagde vluchten
+    if delay_filter and "Flight Status" in df.columns:
+        filtered_df = filtered_df[filtered_df["Flight Status"] == "Delayed"]
 
-    # Staafdiagram laten zien
-    if not mean_values.empty:
-        st.bar_chart(mean_values)
+    # Alleen bestaande kolommen gebruiken
+    valid_aspects = [col for col in selected_aspects if col in filtered_df.columns]
+
+    if valid_aspects:
+       mean_values = filtered_df[valid_aspects].mean()
+       st.bar_chart(mean_values)
     else:
-        st.warning("Geen aspecten geselecteerd.")
+        st.warning("Geen geldige aspecten geselecteerd of kolommen ontbreken in de dataset.")
+
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
