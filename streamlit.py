@@ -361,8 +361,17 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
+    st.title("Boxplot: Gemiddelde tevredenheid per Geslacht en Klasse")
 
-    st.title("Boxplot: Tevredenheid per Geslacht en Klasse")
+    # Kolommen met losse tevredenheidsaspecten
+    satisfaction_cols = [
+        "On-board Service", "Seat Comfort", "Leg Room Service", "Cleanliness",
+        "Food and Drink", "In-flight Service", "In-flight Wifi Service",
+        "In-flight Entertainment", "Baggage Handling"
+    ]
+
+    # Voeg kolom toe met gemiddelde tevredenheid per passagier
+    df["Satisfaction_Avg"] = df[satisfaction_cols].mean(axis=1)
 
     # Filteropties
     gender_options = ["Alle Geslachten"] + df["Gender"].dropna().unique().tolist()
@@ -387,17 +396,18 @@ elif page == "Dashboard":
         fig_box = px.box(
             df_box,
             x="Class",
-            y="Satisfaction",
+            y="Satisfaction_Avg",
             color="Gender",
-            title="Tevredenheid (0-5) per klasse en geslacht",
+            title="Gemiddelde tevredenheid (0-5) per klasse en geslacht",
             color_discrete_map={"Male": "royalblue", "Female": "lightcoral"}
         )
         fig_box.update_layout(
             xaxis_title="Klasse",
-            yaxis_title="Tevredenheidsscore (0 = laag, 5 = hoog)",
-            yaxis=dict(range=[0, 5])  # vaste schaal van 0-5
+            yaxis_title="Gemiddelde tevredenheidsscore (0 = laag, 5 = hoog)",
+            yaxis=dict(range=[0, 5])  # schaal altijd 0–5
         )
         st.plotly_chart(fig_box, use_container_width=True)
+
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
