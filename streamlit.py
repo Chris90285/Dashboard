@@ -272,44 +272,66 @@ elif page == "Dashboard":
     # Titel
     st.title("Airline Satisfaction Dashboard")
 
-    # Dropdown voor Class-selectie
-    class_options = df["Class"].dropna().unique()
-    selected_class = st.selectbox("Kies een Class:", sorted(class_options))
+    # Dropdown voor Class-selectie (met "Alle Klassen")
+    class_options = ["Alle Klassen"] + sorted(df["Class"].dropna().unique())
+    selected_class = st.selectbox("Kies een Class:", class_options)
 
-    # Filter voor vertraagde vluchten
+    # Start met hele dataset of filter op gekozen klasse
+    if selected_class == "Alle Klassen":
+      filtered_df = df.copy()
+    else:
+        filtered_df = df[df["Class"] == selected_class]
+
+    # Filter voor vertraagde vluchten (fallback op Total Delay > 15 als 'Flight Status' niet bestaat)
     delay_filter = st.checkbox("Toon alleen vertraagde vluchten ✈️", value=False)
+    if delay_filter:
+        if "Flight Status" in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df["Flight Status"] == "Delayed"]
+        elif "Total Delay" in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df["Total Delay"] > 15]
+        else:
+            st.warning("Geen 'Flight Status' of 'Total Delay' kolom gevonden; vertraagde filter niet toegepast.")
 
-    # Kolommen die we willen analyseren
-    aspects = [
-       "Ease of Online booking", "Checkin service", "Online boarding",
-        "Gate location", "On-board service", "Seat comfort",
-        "Leg room service", "Cleanliness", "Food and drink",
-        "Inflight service", "Inflight wifi service", "Inflight entertainment",
-        "Baggage handling"
+    # Verwachte aspecten (labels)
+    expected_aspects = [
+    "Ease of Online booking", "Checkin service", "Online boarding",
+    "Gate location", "On-board service", "Seat comfort",
+    "Leg room service", "Cleanliness", "Food and drink",
+    "Inflight service", "Inflight wifi service", "Inflight entertainment",
+    "Baggage handling"
     ]
 
-    st.write("Kies de aspecten die je wilt zien:")
-    selected_aspects = []
-    for aspect in aspects:
-        if st.checkbox(aspect, value=True):  # standaard allemaal aangevinkt
-            selected_aspects.append(aspect)
+    # Normaliseer kolomnamen voor robuuste matching
+    import re
+    def normalize(s: str) -> str:
+        return re.sub(r'[^a-z0-9]', '', str(s).lower())
 
-    # Data filteren op gekozen class
-    filtered_df = df[df["Class"] == selected_class]
+    norm_to_col = {normalize(col): col for col in df.columns}
+    available_aspects = [(asp, norm_to_col[normalize(asp)]) for asp in expected_aspects if normalize(asp) in norm_to_col]
 
-    # Extra filter op vertraagde vluchten
-    if delay_filter and "Flight Status" in df.columns:
-        filtered_df = filtered_df[filtered_df["Flight Status"] == "Delayed"]
+    # UI: multiselect voor aspecten
+    labels = [label for label, _ in available_aspects]
+    cols_map = {label: col for label, col in available_aspects}
 
-    # Alleen bestaande kolommen gebruiken
-    valid_aspects = [col for col in selected_aspects if col in filtered_df.columns]
-
-    if valid_aspects:
-       mean_values = filtered_df[valid_aspects].mean()
-       st.bar_chart(mean_values)
+    if not labels:
+        st.warning("Geen satisfaction-aspecten gevonden in de dataset. Controleer kolomnamen.")
     else:
-        st.warning("Geen geldige aspecten geselecteerd of kolommen ontbreken in de dataset.")
+        st.write("Kies de aspecten die je wilt zien:")
+        selected_labels = st.multiselect("Aspects", options=labels, default=labels)
 
+        selected_cols = [cols_map[label] for label in selected_labels]
+
+        # Alleen numerieke kolommen meenemen
+        valid_cols = [c for c in selected_cols if c in filtered_df.columns and pd.api.types.is_numeric_dtype(filtered_df[c])]
+
+        if valid_cols and len(filtered_df) > 0:
+            mean_values = filtered_df[valid_cols].mean()
+            # Zet index terug naar de gebruiksvriendelijke labels
+            idx_to_label = {col: label for label, col in available_aspects}
+            mean_values.index = [idx_to_label.get(col, col) for col in mean_values.index]
+            st.bar_chart(mean_values)
+        else:
+            st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
