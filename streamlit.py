@@ -361,27 +361,56 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
-    st.title("Gemiddelde tevredenheid per Geslacht en Klasse")
+    # Title
+    st.title("Boxplot: Gemiddelde tevredenheid per Geslacht en Klasse")
 
-    fig_box = px.box(
-        df_box,
-        x="Class",
-        y="Satisfaction_Avg",
-        color="Gender",
-        title="Gemiddelde tevredenheid (0-5) per klasse en geslacht",
-        color_discrete_map={
-            "Male": primary_color,   # in sync met Satisfied
-            "Female": "lightcoral"   # in sync met Dissatisfied
-        }
-    )
+    # Kolommen met losse tevredenheidsaspecten
+    satisfaction_cols = [
+        "On-board Service", "Seat Comfort", "Leg Room Service", "Cleanliness",
+        "Food and Drink", "In-flight Service", "In-flight Wifi Service",
+        "In-flight Entertainment", "Baggage Handling"
+    ]
 
-    fig_box.update_layout(
-        xaxis_title="Klasse",
-        yaxis_title="Gemiddelde tevredenheid (0-5)",
-        yaxis=dict(range=[0, 5])  # vaste schaal 0–5
-    )
+    # Voeg kolom toe met gemiddelde tevredenheid per passagier
+    df["Satisfaction_Avg"] = df[satisfaction_cols].mean(axis=1)
 
-    st.plotly_chart(fig_box, use_container_width=True)
+    # Filteropties
+    gender_options = ["Alle Geslachten"] + df["Gender"].dropna().unique().tolist()
+    selected_gender = st.selectbox("Kies een geslacht:", gender_options, key="gender_boxplot")
+
+    class_options = ["Alle Klassen"] + df["Class"].dropna().unique().tolist()
+    selected_class = st.selectbox("Kies een klasse:", class_options, key="class_boxplot")
+
+    # Maak een filterkopie
+    df_box = df.copy()
+
+    if selected_gender != "Alle Geslachten":
+        df_box = df_box[df_box["Gender"] == selected_gender]
+
+    if selected_class != "Alle Klassen":
+        df_box = df_box[df_box["Class"] == selected_class]
+
+    # Alleen boxplot tekenen als er data is
+    if df_box.empty:
+        st.warning("Geen data beschikbaar voor deze selectie.")
+    else:
+        fig_box = px.box(
+            df_box,
+            x="Class",
+            y="Satisfaction_Avg",
+            color="Gender",
+            title="Gemiddelde tevredenheid (0-5) per klasse en geslacht",
+            color_discrete_map={
+                "Male": primary_color,
+                "Female": "lightcoral" if stijl == "KLM Blauw" else "goldenrod"
+            }
+        )
+        fig_box.update_layout(
+            xaxis_title="Klasse",
+            yaxis_title="Gemiddelde tevredenheidsscore (0 = laag, 5 = hoog)",
+            yaxis=dict(range=[0, 5])  # schaal altijd 0–5
+        )
+        st.plotly_chart(fig_box, use_container_width=True)
 
 
 #-------------------page 3-----------------------------
