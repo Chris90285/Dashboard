@@ -52,7 +52,7 @@ with st.sidebar:
     st.markdown("---")
 
     # overige sidebar-elementen
-    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard","Vliegtuig vs Trein" "Data Overzicht", "Werkwijze"])
+    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard","Vliegtuig vs Trein", "Data Overzicht", "Werkwijze"])
 
     # witregel
     st.write("")  
