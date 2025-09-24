@@ -363,12 +363,12 @@ elif page == "Dashboard":
     #---------------------------------------------------------
     st.title("Boxplot: Leeftijdsverdeling per Geslacht en Klasse")
 
-    # Filteropties in de sidebar of direct boven de grafiek
+    # Filteropties
     gender_options = ["Alle Geslachten"] + df["Gender"].dropna().unique().tolist()
-    selected_gender = st.selectbox("Kies een geslacht:", gender_options)
+    selected_gender = st.selectbox("Kies een geslacht:", gender_options, key="gender_boxplot")
 
     class_options = ["Alle Klassen"] + df["Class"].dropna().unique().tolist()
-    selected_class = st.selectbox("Kies een klasse:", class_options)
+    selected_class = st.selectbox("Kies een klasse:", class_options, key="class_boxplot")
 
     # Maak een filterkopie
     df_box = df.copy()
@@ -396,7 +396,6 @@ elif page == "Dashboard":
             yaxis_title="Leeftijd"
         )
         st.plotly_chart(fig_box, use_container_width=True)
-
 
 
 
