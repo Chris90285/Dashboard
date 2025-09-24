@@ -361,6 +361,7 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
+
     st.title("Boxplot: Tevredenheid per Geslacht en Klasse")
 
     # Filteropties
@@ -388,12 +389,13 @@ elif page == "Dashboard":
             x="Class",
             y="Satisfaction",
             color="Gender",
-            title="Tevredenheid per klasse en geslacht",
+            title="Tevredenheid (0-5) per klasse en geslacht",
             color_discrete_map={"Male": "royalblue", "Female": "lightcoral"}
         )
         fig_box.update_layout(
             xaxis_title="Klasse",
-            yaxis_title="Tevredenheid (0 = ontevreden, 1 = tevreden)"
+            yaxis_title="Tevredenheidsscore (0 = laag, 5 = hoog)",
+            yaxis=dict(range=[0, 5])  # vaste schaal van 0-5
         )
         st.plotly_chart(fig_box, use_container_width=True)
 
