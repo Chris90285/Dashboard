@@ -476,7 +476,7 @@ elif page == "Dashboard":
             y=alt.Y("Departure Delay", title="Departure Delay (minuten)"),
             color=alt.Color(
                 "rating",
-                scale=alt.Scale(domain=[0, 5], range=["skyblueblue", "blue", "green"]),
+                scale=alt.Scale(domain=[0, 5], range=["red", "orange", "green"]),
                 title="Average Rating"
             ),
             tooltip=["Age", "Flight Distance", "Arrival Delay", "Departure Delay", "rating"]
