@@ -361,7 +361,7 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
-    st.title("Boxplot: Leeftijdsverdeling per Geslacht en Klasse")
+    st.title("Boxplot: Tevredenheid per Geslacht en Klasse")
 
     # Filteropties
     gender_options = ["Alle Geslachten"] + df["Gender"].dropna().unique().tolist()
@@ -386,18 +386,16 @@ elif page == "Dashboard":
         fig_box = px.box(
             df_box,
             x="Class",
-            y="Age",
+            y="Satisfaction",
             color="Gender",
-            title="Leeftijdsverdeling per klasse en geslacht",
+            title="Tevredenheid per klasse en geslacht",
             color_discrete_map={"Male": "royalblue", "Female": "lightcoral"}
         )
         fig_box.update_layout(
             xaxis_title="Klasse",
-            yaxis_title="Leeftijd"
+            yaxis_title="Tevredenheid (0 = ontevreden, 1 = tevreden)"
         )
         st.plotly_chart(fig_box, use_container_width=True)
-
-
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
