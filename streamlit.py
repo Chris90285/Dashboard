@@ -235,7 +235,8 @@ if page == "Snel Overzicht":
 elif page == "Dashboard":
     st.markdown(f"<h1 style='color:{primary_color}'>📊 Dashboard klanttevredenheid KLM</h1>", unsafe_allow_html=True)
     st.write("Filter hier op vertraagde vluchten.")
-
+    #-------------------Grafiek Chris-------------------------
+    #---------------------------------------------------------
     st.markdown("### ✈️ Vertragingfilters")
     delay_30 = st.checkbox("Alleen vertraagde vluchten (>30 minuten vertraging)")
     delay_60 = st.checkbox("Alleen zwaar vertraagde vluchten (>60 minuten vertraging)")
@@ -266,6 +267,44 @@ elif page == "Dashboard":
     )
     fig.update_layout(xaxis_title="Customer Type & Type of Travel", yaxis_title="Aantal passagiers", legend_title="Satisfaction")
     st.plotly_chart(fig, use_container_width=True)
+    #-------------------Grafiek Koen---------------------------
+    #---------------------------------------------------------
+
+
+# Data inladen
+
+st.title("Airline Satisfaction Dashboard")
+
+# Dropdown voor Class-selectie
+class_options = df["Class"].dropna().unique()
+selected_class = st.selectbox("Kies een Class:", sorted(class_options))
+
+# Kolommen die we willen analyseren
+aspects = [
+    "Ease of Online booking", "Checkin service", "Online boarding",
+    "Gate location", "On-board service", "Seat comfort",
+    "Leg room service", "Cleanliness", "Food and drink",
+    "Inflight service", "Inflight wifi service", "Inflight entertainment",
+    "Baggage handling"
+]
+
+st.write("Kies de aspecten die je wilt zien:")
+selected_aspects = []
+for aspect in aspects:
+    if st.checkbox(aspect, value=True):  # standaard allemaal aangevinkt
+        selected_aspects.append(aspect)
+
+# Filter op gekozen class
+filtered_df = df[df["Class"] == selected_class]
+
+# Gemiddelden berekenen
+mean_values = filtered_df[selected_aspects].mean()
+
+# Staafdiagram laten zien
+if not mean_values.empty:
+    st.bar_chart(mean_values)
+else:
+    st.warning("Geen aspecten geselecteerd.")
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
