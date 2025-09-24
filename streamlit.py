@@ -361,55 +361,42 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
+    st.title("Boxplot: Leeftijdsverdeling per Geslacht en Klasse")
 
-    # Data inladen
-    df1 = pd.read_csv("airline_passenger_satisfaction.csv")
-    df3 = pd.read_csv("airlines_flights_data.csv")
+    # Filteropties in de sidebar of direct boven de grafiek
+    gender_options = ["Alle Geslachten"] + df["Gender"].dropna().unique().tolist()
+    selected_gender = st.selectbox("Kies een geslacht:", gender_options)
 
-    # Gender-Class combi maken
-    df1['Gender_Class'] = df1['Gender'] + ' | ' + df1['Class']
-    unique_combos = df1['Gender_Class'].unique()
-    n = len(unique_combos)
+    class_options = ["Alle Klassen"] + df["Class"].dropna().unique().tolist()
+    selected_class = st.selectbox("Kies een klasse:", class_options)
 
-    # Kleurenpalet
-    jet_colors = cm.jet(np.linspace(0, 1, n))
-    palette = dict(zip(unique_combos, [tuple(c[:3]) for c in jet_colors]))
+    # Maak een filterkopie
+    df_box = df.copy()
 
-    # Boxplot Satisfaction (categorisch)
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(x="Gender_Class", y="Satisfaction", data=df1, palette=palette)
-    plt.title("Satisfaction by Gender and Class")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
+    if selected_gender != "Alle Geslachten":
+        df_box = df_box[df_box["Gender"] == selected_gender]
 
-    # Countplot
-    plt.figure(figsize=(12, 6))
-    sns.countplot(x='Gender_Class', hue='Satisfaction', data=df1)
-    plt.title("Aantal per Gender-Class en Satisfaction")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
+    if selected_class != "Alle Klassen":
+        df_box = df_box[df_box["Class"] == selected_class]
 
-    # Satisfaction mapping naar 2 scores
-    score_map = {
-        'Dissatisfied': 1,
-        'Neutral': 1,
-        'Satisfied': 2
-    }
-    df1['Satisfaction_score'] = df1['Satisfaction'].map(score_map)
+    # Alleen boxplot tekenen als er data is
+    if df_box.empty:
+        st.warning("Geen data beschikbaar voor deze selectie.")
+    else:
+        fig_box = px.box(
+            df_box,
+            x="Class",
+            y="Age",
+            color="Gender",
+            title="Leeftijdsverdeling per klasse en geslacht",
+            color_discrete_map={"Male": "royalblue", "Female": "lightcoral"}
+        )
+        fig_box.update_layout(
+            xaxis_title="Klasse",
+            yaxis_title="Leeftijd"
+        )
+        st.plotly_chart(fig_box, use_container_width=True)
 
-    print("\nVoorbeeld satisfaction scores:")
-    print(df1[['Satisfaction', 'Satisfaction_score']].head())
-
-    # Boxplot met numerieke scores
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(x='Gender_Class', y='Satisfaction_score', data=df1, palette=palette)
-    plt.title("Satisfaction by Gender and Class (2 Scores)")
-    plt.xticks(rotation=45)
-    plt.yticks([1, 2], ['Dissatisfied/Neutral', 'Satisfied'])
-    plt.tight_layout()
-    plt.show()
 
 
 
