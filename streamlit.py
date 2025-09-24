@@ -362,26 +362,27 @@ elif page == "Dashboard":
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
     st.title("Gemiddelde tevredenheid per Geslacht en Klasse")
-    if df_box.empty:
-        st.warning("Geen data beschikbaar voor deze selectie.")
-    else:
-        fig_box = px.box(
-            df_box,
-            x="Class",
-            y="Satisfaction_Avg",
-            color="Gender",
-            title="Gemiddelde tevredenheid (0-5) per klasse en geslacht",
-            color_discrete_map={
-                "Male": primary_color,  
-                "Female": "lightcoral" 
-            }
-        )
-        fig_box.update_layout(
-            xaxis_title="Klasse",
-            yaxis_title="Gemiddelde tevredenheid (0-5)",
-            yaxis=dict(range=[0, 5])  
-        )
-        st.plotly_chart(fig_box, use_container_width=True)
+
+    fig_box = px.box(
+        df_box,
+        x="Class",
+        y="Satisfaction_Avg",
+        color="Gender",
+        title="Gemiddelde tevredenheid (0-5) per klasse en geslacht",
+        color_discrete_map={
+            "Male": primary_color,   # in sync met Satisfied
+            "Female": "lightcoral"   # in sync met Dissatisfied
+        }
+    )
+
+    fig_box.update_layout(
+        xaxis_title="Klasse",
+        yaxis_title="Gemiddelde tevredenheid (0-5)",
+        yaxis=dict(range=[0, 5])  # vaste schaal 0–5
+    )
+
+    st.plotly_chart(fig_box, use_container_width=True)
+
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
