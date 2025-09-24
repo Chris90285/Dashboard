@@ -358,10 +358,55 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
-    df1 = pd.read_csv("airline_passenger_satisfaction.csv", header=0, sep="," )
-    print(df1.to_string())
-    df2 = pd.read_csv("data_dictionary.csv", header=0, sep=",")
-    print(df2.to_string())
+    st.markdown("### ✈️ Vertragingfilters")
+    delay_30 = st.checkbox("Alleen vertraagde vluchten (>30 minuten vertraging)")
+    delay_60 = st.checkbox("Alleen zwaar vertraagde vluchten (>60 minuten vertraging)")
+
+    df_filtered = df.copy()
+    if delay_30 and delay_60:
+        st.warning("⚠️ Beide filters geselecteerd. De strengste filter (>60 minuten) is toegepast.")
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 60]
+    elif delay_30:
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 30]
+    elif delay_60:
+        df_filtered = df_filtered[df_filtered["Total Delay"] > 60]
+    else:
+        st.info("ℹ️ Geen filter geselecteerd. Alle vluchten worden getoond.")
+
+    agg = df_filtered.groupby(["Customer Type", "Type of Travel", "Satisfaction"]).size().reset_index(name="count")
+    agg["Group"] = agg["Customer Type"] + " - " + agg["Type of Travel"]
+
+    fig = px.bar(
+        agg,
+        x="Group",
+        y="count",
+        color="Satisfaction",
+        barmode="group",
+        text_auto=True,
+        color_discrete_sequence=[primary_color, "lightcoral"]
+    )
+    fig.update_layout(
+        xaxis_title="Customer Type & Type of Travel",
+        yaxis_title="Aantal passagiers",
+        legend_title="Satisfaction"
+    )
+
+    # Afwisselend blauw/geel voor de x-as labels
+    groups = agg["Group"].unique().tolist()
+    colors = ["royalblue", "goldenrod"]  # wisselkleur
+    tickvals = list(range(len(groups)))
+    ticktext = [
+        f"<span style='color:{colors[i % 2]}'>{grp}</span>"
+        for i, grp in enumerate(groups)
+    ]
+
+    fig.update_xaxes(
+        tickvals=tickvals,
+        ticktext=ticktext
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
