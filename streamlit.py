@@ -68,7 +68,7 @@ with st.sidebar:
 
     # Voeg laatst geupdate datum toe
     st.write("Voor het laatst geupdate op:")
-    st.write("23:39 - 23 sep 2025")
+    st.write("*23:39 - 23 sep 2025*")
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
@@ -271,12 +271,12 @@ elif page == "Dashboard":
 #-------------------------------------------------------
 elif page == "Data Overzicht":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Data Overzicht</h1>", unsafe_allow_html=True)
-    st.write("Op deze pagina zijn alle gebruikte datasets te zien.")
-    st.write("Hieronder is het  dataframe 'airline_passenger_satisfaction.csv' te zien.")
+    st.write("Op deze pagina zijn alle gebruikte datasets te vinden.")
+    st.write("Hieronder is het  dataframe 'airline_passenger_satisfaction.csv' te zien:")
     # Main dataframe laten zien
     st.dataframe(df)
-    st.write("Bron: Ahmad Bhat, M. (n.d.). Airline passenger satisfaction [Data set]. Kaggle.")
-    st.write("https://www.kaggle.com/datasets/mysarahmadbhat/airline-passenger-satisfaction")
+    st.write("*Bron: Ahmad Bhat, M. (n.d.). Airline passenger satisfaction [Data set]. Kaggle.*")
+    st.write("*https://www.kaggle.com/datasets/mysarahmadbhat/airline-passenger-satisfaction*")
     
     # Witregels
     st.write("")
@@ -284,11 +284,11 @@ elif page == "Data Overzicht":
     st.write("")
     st.write("")
 
-    st.write("Hieronder is het dataframe 'airlines_flights_data.csv' te zien.")
+    st.write("Hieronder is het dataframe 'airlines_flights_data.csv' te zien:")
     # Extra dataframe laten zien
     st.dataframe(df_extra)
-    st.write("Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.")
-    st.write("https://www.kaggle.com/datasets/rohitgrewal/airlines-flights-data")
+    st.write("*Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.*")
+    st.write("*https://www.kaggle.com/datasets/rohitgrewal/airlines-flights-data*")
 
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
