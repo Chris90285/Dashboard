@@ -528,8 +528,6 @@ elif page == "Data Overzicht":
 
     st.write("Hieronder is het dataframe *Surveydata_train_(1)_(1).csv* te zien:")
     st.write("Wissel met het dropdown menu tussen het originele en het aanghepaste dataset.")
-    # Extra dataframe laten zien
-    st.dataframe(df_extra)
     # Dropdown om te kiezen welk dataframe te tonen
     selected_df = st.selectbox(
         "Kies een dataset om te bekijken:",
