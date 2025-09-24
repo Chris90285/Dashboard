@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import numpy as np 
 import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.cm as cm
 
 #-------------------data inladen-----------------------
 #-------------------------------------------------------
