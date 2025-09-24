@@ -360,12 +360,77 @@ elif page == "Dashboard":
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
     #-------------------Grafiek Ann---------------------------
     #---------------------------------------------------------
-    plt.figure(figsize=(12,6))
-    sns.countplot(x='Gender_Class',hue='Satisfaction', data=df1)
+
+    # Data inladen
+    df1 = pd.read_csv("airline_passenger_satisfaction.csv")
+    df2 = pd.read_csv("data_dictionary.csv")
+    df3 = pd.read_csv("airlines_flights_data.csv")
+
+    # Eerste paar rijen tonen
+    print("Dataset 1:")
+    print(df1.head())
+    print("\nDataset 2:")
+    print(df2.head())
+    print("\nDataset 3:")
+    print(df3.head())
+
+    # Missing values checken
+    print("\nMissing values in df1:")
+    print(df1.isnull().sum())
+    print("\nMissing values in df2:")
+    print(df2.isnull().sum())
+    print("\nMissing values in df3:")
+    print(df3.isnull().sum())
+
+    # Kolommen checken
+    print("\nKolommen in df1:")
+    print(df1.columns.tolist())
+
+    # Gender-Class combi maken
+    df1['Gender_Class'] = df1['Gender'] + ' | ' + df1['Class']
+    unique_combos = df1['Gender_Class'].unique()
+    n = len(unique_combos)
+
+    # Kleurenpalet
+    jet_colors = cm.jet(np.linspace(0, 1, n))
+    palette = dict(zip(unique_combos, [tuple(c[:3]) for c in jet_colors]))
+
+    # Boxplot Satisfaction (categorisch)
+    plt.figure(figsize=(12, 6))
+    sns.boxplot(x="Gender_Class", y="Satisfaction", data=df1, palette=palette)
+    plt.title("Satisfaction by Gender and Class")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+    # Countplot
+    plt.figure(figsize=(12, 6))
+    sns.countplot(x='Gender_Class', hue='Satisfaction', data=df1)
     plt.title("Aantal per Gender-Class en Satisfaction")
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+
+    # Satisfaction mapping naar 2 scores
+    score_map = {
+        'Dissatisfied': 1,
+        'Neutral': 1,
+        'Satisfied': 2
+    }
+    df1['Satisfaction_score'] = df1['Satisfaction'].map(score_map)
+
+    print("\nVoorbeeld satisfaction scores:")
+    print(df1[['Satisfaction', 'Satisfaction_score']].head())
+
+    # Boxplot met numerieke scores
+    plt.figure(figsize=(12, 6))
+    sns.boxplot(x='Gender_Class', y='Satisfaction_score', data=df1, palette=palette)
+    plt.title("Satisfaction by Gender and Class (2 Scores)")
+    plt.xticks(rotation=45)
+    plt.yticks([1, 2], ['Dissatisfied/Neutral', 'Satisfied'])
+    plt.tight_layout()
+    plt.show()
+
 
 
 #-------------------page 3-----------------------------
