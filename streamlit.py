@@ -277,7 +277,7 @@ elif page == "Dashboard":
 
     # Dropdown voor Class-selectie
     class_options = df["Class"].dropna().unique()
-selected_class = st.selectbox("Kies een Class:", sorted(class_options))
+    selected_class = st.selectbox("Kies een Class:", sorted(class_options))
 
     # Kolommen die we willen analyseren
     aspects = [
@@ -302,7 +302,7 @@ selected_class = st.selectbox("Kies een Class:", sorted(class_options))
 
     # Staafdiagram laten zien
     if not mean_values.empty:
-    st.bar_chart(mean_values)
+        st.bar_chart(mean_values)
     else:
         st.warning("Geen aspecten geselecteerd.")
 
