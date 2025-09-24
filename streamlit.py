@@ -271,8 +271,8 @@ elif page == "Dashboard":
 #-------------------------------------------------------
 elif page == "Data Overzicht":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Data Overzicht</h1>", unsafe_allow_html=True)
-    st.write("Op deze pagina zijn alle gebruikte datasets te vinden.")
-    st.write("Hieronder is het  dataframe 'airline_passenger_satisfaction.csv' te zien:")
+    st.write("Op deze pagina zijn de gebruikte datasets te vinden. Onder ieder dataset staat de bijbehorende bron.")
+    st.write("Hieronder is het  dataframe *airline_passenger_satisfaction.csv* te zien:")
     # Main dataframe laten zien
     st.dataframe(df)
     st.write("*Bron: Ahmad Bhat, M. (n.d.). Airline passenger satisfaction [Data set]. Kaggle.*")
@@ -284,7 +284,7 @@ elif page == "Data Overzicht":
     st.write("")
     st.write("")
 
-    st.write("Hieronder is het dataframe 'airlines_flights_data.csv' te zien:")
+    st.write("Hieronder is het dataframe *airlines_flights_data.csv* te zien:")
     # Extra dataframe laten zien
     st.dataframe(df_extra)
     st.write("*Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.*")
