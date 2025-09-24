@@ -24,10 +24,18 @@ df = load_data()
 #Extra data set
 @st.cache_data
 def load_extra_data():
-    df_extra = pd.read_csv("airlines_flights_data.csv")
+    df_extra = pd.read_csv("Surveydata_train_(1)_(1).csv")
     return df_extra
 
 df_extra = load_extra_data()
+
+#Aangepast train data set
+@st.cache_data
+def load_extra_data():
+    df_extra_aangepast = pd.read_csv("Train_Japan_Opgeschoond.csv")
+    return df_extra
+
+df_extra_aangepast = load_extra_data()
 
 #-------------------sidebar-----------------------------
 #-------------------------------------------------------
@@ -498,7 +506,7 @@ elif page == "Dashboard":
 #-------------------page 3-----------------------------
 #------------------------------------------------------
 elif page == "Vliegtuig vs Trein":
-    st.markdown(f"<h1 style='color:{primary_color}'>Tevredenheid vliegtuig vs trein</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='color:{primary_color}'🚝Klanttevredenheid Vliegtuig vs Trein</h1>", unsafe_allow_html=True)
     st.write("Hier is een vergelijking gemaakt tussen de klanttevredenheid van vliegtuigen (KLM) en treinen in Japan.")
 
 #-------------------page 4-----------------------------
@@ -518,11 +526,24 @@ elif page == "Data Overzicht":
     st.write("")
     st.write("")
 
-    st.write("Hieronder is het dataframe *airlines_flights_data.csv* te zien:")
+    st.write("Hieronder is het dataframe *Surveydata_train_(1)_(1).csv* te zien:")
+    st.write("Wissel met het dropdown menu tussen het originele en het aanghepaste dataset.")
     # Extra dataframe laten zien
     st.dataframe(df_extra)
-    st.write("*Bron: Grewal, R. (n.d.). Airlines flights data [Data set]. Kaggle.*")
-    st.write("*https://www.kaggle.com/datasets/rohitgrewal/airlines-flights-data*")
+    # Dropdown om te kiezen welk dataframe te tonen
+    selected_df = st.selectbox(
+        "Kies een dataset om te bekijken:",
+        ["Origineel", "Aangepast"]
+    )
+
+    # Dataframe tonen afhankelijk van selectie
+    if selected_df == "Origineel":
+        st.dataframe(df_extra)
+    else:
+        st.dataframe(df_extra_aangepast)
+    st.write("*Bron: Thejas2002. (n.d.). Shinkansen Travel Experience [Data set]. Kaggle.*")
+    st.write("*https://www.kaggle.com/datasets/thejas2002/shinkansen-travel-experience*")
+
 
 #-------------------page 5-----------------------------
 #-------------------------------------------------------
