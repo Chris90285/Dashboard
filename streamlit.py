@@ -363,28 +363,7 @@ elif page == "Dashboard":
 
     # Data inladen
     df1 = pd.read_csv("airline_passenger_satisfaction.csv")
-    df2 = pd.read_csv("data_dictionary.csv")
     df3 = pd.read_csv("airlines_flights_data.csv")
-
-    # Eerste paar rijen tonen
-    print("Dataset 1:")
-    print(df1.head())
-    print("\nDataset 2:")
-    print(df2.head())
-    print("\nDataset 3:")
-    print(df3.head())
-
-    # Missing values checken
-    print("\nMissing values in df1:")
-    print(df1.isnull().sum())
-    print("\nMissing values in df2:")
-    print(df2.isnull().sum())
-    print("\nMissing values in df3:")
-    print(df3.isnull().sum())
-
-    # Kolommen checken
-    print("\nKolommen in df1:")
-    print(df1.columns.tolist())
 
     # Gender-Class combi maken
     df1['Gender_Class'] = df1['Gender'] + ' | ' + df1['Class']
