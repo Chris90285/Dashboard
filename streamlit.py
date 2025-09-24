@@ -234,7 +234,11 @@ if page == "Snel Overzicht":
 #-------------------------------------------------------
 elif page == "Dashboard":
     st.markdown(f"<h1 style='color:{primary_color}'>📊 Dashboard klanttevredenheid KLM</h1>", unsafe_allow_html=True)
-    st.write("Filter hier op vertraagde vluchten.")
+    # Witregel
+    st.write("")
+
+    # Titel
+    st.title("Tevredenheid per klanttype en reisdoel")
     #-------------------Grafiek Chris-------------------------
     #---------------------------------------------------------
     st.markdown("### ✈️ Vertragingfilters")
@@ -262,7 +266,6 @@ elif page == "Dashboard":
         color="Satisfaction",
         barmode="group",
         text_auto=True,
-        title="Satisfaction per Customer Type en Type of Travel",
         color_discrete_sequence=[primary_color, "lightcoral"]
     )
     fig.update_layout(xaxis_title="Customer Type & Type of Travel", yaxis_title="Aantal passagiers", legend_title="Satisfaction")
@@ -270,11 +273,11 @@ elif page == "Dashboard":
     #-------------------Grafiek Koen---------------------------
     #---------------------------------------------------------
     # Titel
-    st.title("Airline Satisfaction Dashboard")
+    st.title("Tevredenheid per categorie")
 
     # Dropdown voor Class-selectie (met "Alle Klassen")
     class_options = ["Alle Klassen"] + sorted(df["Class"].dropna().unique())
-    selected_class = st.selectbox("Kies een Class:", class_options)
+    selected_class = st.selectbox("Kies een klasse:", class_options)
 
     # Start met hele dataset of filter op gekozen klasse
     if selected_class == "Alle Klassen":
