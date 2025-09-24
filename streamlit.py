@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np 
 
 #-------------------data inladen-----------------------
 #-------------------------------------------------------
@@ -268,8 +269,28 @@ elif page == "Dashboard":
         text_auto=True,
         color_discrete_sequence=[primary_color, "lightcoral"]
     )
-    fig.update_layout(xaxis_title="Customer Type & Type of Travel", yaxis_title="Aantal passagiers", legend_title="Satisfaction")
+    fig.update_layout(
+        xaxis_title="Customer Type & Type of Travel",
+        yaxis_title="Aantal passagiers",
+        legend_title="Satisfaction"
+    )
+
+    # Afwisselend blauw/geel voor de x-as labels
+    groups = agg["Group"].unique().tolist()
+    colors = ["royalblue", "goldenrod"]  # wisselkleur
+    tickvals = list(range(len(groups)))
+    ticktext = [
+        f"<span style='color:{colors[i % 2]}'>{grp}</span>"
+        for i, grp in enumerate(groups)
+    ]
+
+    fig.update_xaxes(
+        tickvals=tickvals,
+        ticktext=ticktext
+    )
+
     st.plotly_chart(fig, use_container_width=True)
+
     #-------------------Grafiek Koen---------------------------
     #---------------------------------------------------------
     # Titel
@@ -335,6 +356,12 @@ elif page == "Dashboard":
             st.bar_chart(mean_values)
         else:
             st.warning("Geen geldige numerieke aspecten geselecteerd, of er is geen data na filtering.")
+    #-------------------Grafiek Ann---------------------------
+    #---------------------------------------------------------
+    df1 = pd.read_csv("airline_passenger_satisfaction.csv", header=0, sep="," )
+    print(df1.to_string())
+    df2 = pd.read_csv("data_dictionary.csv", header=0, sep=",")
+    print(df2.to_string())
 
 #-------------------page 3-----------------------------
 #-------------------------------------------------------
