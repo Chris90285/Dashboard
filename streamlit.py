@@ -829,49 +829,50 @@ elif page == "Toelichting":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Toelichting</h1>", unsafe_allow_html=True)
     st.write("")
     st.markdown("""
-### Introductie
+    **Introductie**
 
-Voor dit project zijn datasets van Kaggle gebruikt: één over KLM-vluchten en één over treinen in Japan. Het doel is inzicht te krijgen in klanttevredenheid en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden, zoals klasse, comfort, leeftijd en vertraging.
-LET OP: Het airline dataset gaat niet over KLM, de naam is door ons toegevoegd ter illustratie.
----
+    Voor dit project zijn datasets van Kaggle gebruikt: één over KLM-vluchten en één over treinen in Japan. Het doel is inzicht te krijgen in klanttevredenheid en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden, zoals klasse, comfort, leeftijd en vertraging.  
+    LET OP: Het airline dataset gaat niet over KLM, de naam is door ons toegevoegd ter illustratie.
 
-#### KLM-vluchten
+    ---
 
-**Dataset:**  
-Gegevens van passagiers zoals leeftijd, geslacht, reisklasse, afstand, vertrek- en aankomstvertragingen en scores op tevredenheidsaspecten.
+    KLM-vluchten
 
-**Visualisaties:**
-- **Scatterplot – Leeftijd vs Afstand:** laat verband zien tussen leeftijd en vluchtafstand.
-- **Boxplot – Tevredenheid vs Geslacht en Klasse:** vergelijkt tevredenheid tussen mannen/vrouwen en economy/businessclass.
-- **Staafdiagram – Tevredenheid per aspect:** analyseert verschillende aspecten zoals zitcomfort, eten en drinken, inflight service.
-- **Gemiddelde tevredenheid per categorie:** toont staafdiagram en radar chart voor categorieën zoals service, comfort en entertainment.
-- **KPI-indicatoren:** totaal passagiers, gemiddelde tevredenheid, vertrek- en aankomstvertragingen, percentage vertraagde vluchten.
-- **Histogram – Tevredenheid:** verdeling van scores bij KLM-vluchten.
-- **Scatterplot vertraging:** Arrival vs Departure Delay, gekleurd op gemiddelde rating.
+    **Dataset:**  
+    Gegevens van passagiers zoals leeftijd, geslacht, reisklasse, afstand, vertrek- en aankomstvertragingen en scores op tevredenheidsaspecten.
 
-**Voorspellend model:**  
-Er is een simpel voorspellend model gemaakt dat de kans berekent dat een passagier tevreden is (**Satisfaction_Avg ≥ 3.5**).  
-- **Feature engineering:**  
-  - `Is_Delayed` = 1 als totale vertraging > 15 minuten, anders 0.  
-  - Filters voor klasse, geslacht, leeftijd en totale vertraging.  
-- **Output:** kans op tevredenheid gebaseerd op de geselecteerde filters.
+    **Visualisaties:**
+    - Scatterplot – Leeftijd vs Afstand: laat verband zien tussen leeftijd en vluchtafstand.
+    - Boxplot – Tevredenheid vs Geslacht en Klasse: vergelijkt tevredenheid tussen mannen/vrouwen en economy/businessclass.
+    - Staafdiagram – Tevredenheid per aspect: analyseert verschillende aspecten zoals zitcomfort, eten en drinken, inflight service.
+    - Gemiddelde tevredenheid per categorie: toont staafdiagram en radar chart voor categorieën zoals service, comfort en entertainment.
+    - KPI-indicatoren: totaal passagiers, gemiddelde tevredenheid, vertrek- en aankomstvertragingen, percentage vertraagde vluchten.
+    - Histogram – Tevredenheid: verdeling van scores bij KLM-vluchten.
+    - Scatterplot vertraging: Arrival vs Departure Delay, gekleurd op gemiddelde rating.
 
----
+    **Voorspellend model:**  
+    Er is een simpel voorspellend model gemaakt dat de kans berekent dat een passagier tevreden is (Satisfaction_Avg ≥ 3.5).  
+    - Feature engineering:  
+    - `Is_Delayed` = 1 als totale vertraging > 15 minuten, anders 0.  
+    - Filters voor klasse, geslacht, leeftijd en totale vertraging.  
+    - Output: kans op tevredenheid gebaseerd op de geselecteerde filters.
 
-#### Japanse treinen
+    ---
 
-**Dataset:**  
-Ervaring van treinreizigers, met nadruk op comfort, punctualiteit en tevredenheid.
+    Japanse treinen
 
-**Visualisaties:**
-- **Scatterplot – Leeftijd vs Reistijd:** inzicht in leeftijdsgroepen en reistijd.
-- **Histogram – Tevredenheid:** vergelijking van tevredenheid tussen treinen en KLM-vluchten.
-- **Radar chart vergelijking:** overzicht van scores per aspect voor treinen vs vliegtuigen.
+    **Dataset:**  
+    Ervaring van treinreizigers, met nadruk op comfort, punctualiteit en tevredenheid.
 
----
+    **Visualisaties:**
+    - Scatterplot – Leeftijd vs Reistijd: inzicht in leeftijdsgroepen en reistijd.
+    - Histogram – Tevredenheid: vergelijking van tevredenheid tussen treinen en KLM-vluchten.
+    - Radar chart vergelijking: overzicht van scores per aspect voor treinen vs vliegtuigen.
 
-#### Conclusie
-- Klasse, comfort en ruimte beïnvloeden tevredenheid sterk.  
-- Leeftijd en geslacht spelen een kleinere, maar soms merkbare rol.  
-- Algemene tevredenheid bij treinen ligt iets hoger dan bij vliegtuigen.
-""")
+    ---
+
+    Conclusie
+    - Klasse, comfort en ruimte beïnvloeden tevredenheid sterk.  
+    - Leeftijd en geslacht spelen een kleinere, maar soms merkbare rol.  
+    - Algemene tevredenheid bij treinen ligt iets hoger dan bij vliegtuigen.
+    """)
