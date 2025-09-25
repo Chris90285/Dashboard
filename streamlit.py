@@ -852,11 +852,11 @@ Gegevens van passagiers zoals leeftijd, geslacht, reisklasse, afstand, vertrek- 
 - **Scatterplot vertraging:** Arrival vs Departure Delay, gekleurd op gemiddelde rating.  
 
 **Voorspellend model:**  
-Het model berekent de kans dat een passagier tevreden is (**Satisfaction_Avg ≥ 3.5**).  
+- Het model berekent de kans dat een passagier tevreden is (**Satisfaction_Avg ≥ 3.5**).  
 - **Feature engineering:**  
   - `Is_Delayed` = 1 als de passagier meer dan 15 minuten vertraging had, anders 0.  
-  - Houdt rekening met **klasse**, **geslacht**, **leeftijd** en **totale vertraging**.  
-- **Output:** toont de kans op tevredenheid voor passagiers die voldoen aan de geselecteerde filters.
+  - Het model houdt rekening met **klasse**, **geslacht**, **leeftijd** en **totale vertraging**.  
+- **Output:** toont de kans op tevredenheid voor passagiers die voldoen aan de gekozen filters.
 
 ---
 
