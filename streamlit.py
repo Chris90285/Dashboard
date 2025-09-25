@@ -32,7 +32,7 @@ df_extra = load_extra_data()
 #Aangepast train data set
 @st.cache_data
 def load_extra_data_aangepast():
-    df_extra_aangepast = pd.read_csv("Train_Japan_Opgeschoond.csv")
+    df_extra_aangepast = pd.read_excel("Train_Japan_Opgeschoond.xls")
     return df_extra_aangepast
 
 df_extra_aangepast = load_extra_data_aangepast()
