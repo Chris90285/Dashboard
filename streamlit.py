@@ -504,6 +504,70 @@ elif page == "Dashboard":
     # Extra info tonen
     st.write(f"Geselecteerde leeftijdsrange: {min_age} - {max_age}")
     st.write(f"Geselecteerde vlucht afstand: {min_dist} - {max_dist}")
+    #-------------------Grafiek Lieke 2-----------------------
+    #---------------------------------------------------------
+
+    # Kolommen die meegenomen worden voor de radar chart
+    factors = [
+        "Departure and Arrival Time Convenience","Ease of Online Booking","Check-in Service","Online Boarding",
+        "Gate Location","On-board Service","Seat Comfort","Leg Room Service","Cleanliness",
+        "Food and Drink","In-flight Service","In-flight Wifi Service",
+        "In-flight Entertainment","Baggage Handling"
+    ]
+
+    # Gemiddelde scores berekenen
+    mean_scores = df[factors].mean().values
+
+    # Radar chart voorbereiden
+    N = len(factors)
+    angles = np.linspace(0, 2*np.pi, N, endpoint=False).tolist()
+    scores = mean_scores.tolist()
+    scores += scores[:1]  # polygon sluiten
+    angles += angles[:1]  # polygon sluiten
+
+    # Plot maken
+    fig, ax = plt.subplots(figsize=(7,7), subplot_kw=dict(polar=True))
+
+    # Kleur (consistent met dashboard)
+    primary_color = "royalblue"
+
+    # Lijn + vulling
+    ax.plot(angles, scores, color=primary_color, linewidth=2)
+    ax.fill(angles, scores, color=primary_color, alpha=0.25)
+
+    # Stippen bij elke score
+    ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
+
+    # Waarden buiten de cirkel zetten (vast op rand + marge)
+    r_outer = 5.2  # iets buiten maximale schaal
+    for angle, score in zip(angles, scores):
+        ax.text(angle, r_outer, f"{score:.1f}", 
+                ha="center", va="center", fontsize=8, color="black")
+
+    # Labels rond de cirkel verder naar buiten zetten
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(factors, fontsize=9)
+    for label in ax.get_xticklabels():
+        label.set_horizontalalignment("center")
+    ax.tick_params(axis='x', pad=15)  # meer ruimte tussen labels en grafiek
+
+    # Y-as schaal forceren: 0 in het midden, 5 aan de rand
+    ax.set_ylim(0, 5)
+
+    # Rasters en schaal aanpassen
+    ax.set_rlabel_position(30)
+    ax.set_yticks([1, 2, 3, 4, 5])
+    ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=7, color="gray")
+    ax.grid(color="lightgray", linestyle="--")
+
+    # Titel
+    plt.title("Gemiddelde scores per factor (Radar Chart)", size=12, pad=20)
+
+    # Tonen in Streamlit
+    st.pyplot(fig)
+
+
+
 
 #-------------------page 3-----------------------------
 #------------------------------------------------------
