@@ -545,7 +545,7 @@ elif page == "Dashboard":
 
             
             if abs(deg - 0) < 1 or abs(deg - 180) < 1:
-                y += 1  # duw de tekst iets verder naar buiten
+                y += 3  # duw de tekst iets verder naar buiten
 
             ax.text(angle, y, f"{score:.1f}",
                     ha="center", va="center", fontsize=8, color="black")
@@ -562,7 +562,6 @@ elif page == "Dashboard":
         ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=7, color="gray")
         ax.grid(color="lightgray", linestyle="--")
 
-        plt.title("Gemiddelde scores per factor (Radar Chart)", size=12, pad=20)
         return fig
 
     fig = plot_radar_chart(df, primary_color=primary_color)
