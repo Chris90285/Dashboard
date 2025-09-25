@@ -506,6 +506,8 @@ elif page == "Dashboard":
     st.write(f"Geselecteerde vlucht afstand: {min_dist} - {max_dist}")
     #-------------------Grafiek Lieke 2-----------------------
     #---------------------------------------------------------
+    # Title
+    st.title("Tevredenheid per categorie als Radarchart")
 
     # Kolommen die meegenomen worden voor de radar chart
     factors = [
@@ -539,7 +541,7 @@ elif page == "Dashboard":
     ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
 
     # Waarden buiten de cirkel zetten (vast op rand + marge)
-    r_outer = 5.2  # iets buiten maximale schaal
+    r_outer = 5.7  # iets buiten maximale schaal
     for angle, score in zip(angles, scores):
         ax.text(angle, r_outer, f"{score:.1f}", 
                 ha="center", va="center", fontsize=8, color="black")
@@ -559,9 +561,6 @@ elif page == "Dashboard":
     ax.set_yticks([1, 2, 3, 4, 5])
     ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=7, color="gray")
     ax.grid(color="lightgray", linestyle="--")
-
-    # Titel
-    plt.title("Gemiddelde scores per factor (Radar Chart)", size=12, pad=20)
 
     # Tonen in Streamlit
     st.pyplot(fig)
