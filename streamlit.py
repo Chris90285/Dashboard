@@ -598,7 +598,92 @@ elif page == "Dashboard":
     st.pyplot(fig)
 
 
- 
+    #-------------------Voorspellend model--------------------
+    #---------------------------------------------------------
+    st.title("Voorspelling van klanttevredenheid")
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # --- Feature engineering ---
+    df_model = df.copy()
+    df_model["Is_Delayed"] = (df_model["Total Delay"] > 15).astype(int)
+    df_model = df_model.dropna(subset=["Satisfaction_Avg"])
+    df_model["Satisfied"] = (df_model["Satisfaction_Avg"] >= 4).astype(int)
+
+    # --- Afhankelijke dropdowns ---
+    st.markdown("### Filters voor model")
+
+    # Dropdown 1: Klasse
+    classes = ["Alle Klassen"] + df_model["Class"].dropna().unique().tolist()
+    selected_class = st.selectbox("Kies een klasse:", classes)
+
+    # Filter dataframe op geselecteerde klasse
+    if selected_class != "Alle Klassen":
+        df_filtered_model = df_model[df_model["Class"] == selected_class]
+    else:
+        df_filtered_model = df_model.copy()
+
+    # Dropdown 2: Geslacht (afhankelijk van Klasse)
+    genders = ["Alle Geslachten"] + df_filtered_model["Gender"].dropna().unique().tolist()
+    selected_gender = st.selectbox("Kies een geslacht:", genders)
+
+    if selected_gender != "Alle Geslachten":
+        df_filtered_model = df_filtered_model[df_filtered_model["Gender"] == selected_gender]
+
+    # Slider: Leeftijd
+    min_age = int(df_filtered_model["Age"].min())
+    max_age = int(df_filtered_model["Age"].max())
+    age_range = st.slider("Leeftijdsbereik:", min_age, max_age, (min_age, max_age))
+    df_filtered_model = df_filtered_model[(df_filtered_model["Age"] >= age_range[0]) & (df_filtered_model["Age"] <= age_range[1])]
+
+    # Slider: Vertraging filter
+    max_delay = int(df_filtered_model["Total Delay"].max())
+    delay_threshold = st.slider("Minimale vertraging (minuten):", 0, max_delay, 0)
+    df_filtered_model = df_filtered_model[df_filtered_model["Total Delay"] >= delay_threshold]
+
+    # --- Model training ---
+    features = ["Age", "Flight Distance", "Is_Delayed"]
+    X = df_filtered_model[features]
+    y = df_filtered_model["Satisfied"]
+
+    # Check of er genoeg data is
+    if len(df_filtered_model) < 10:
+        st.warning("Te weinig data na filtering om een model te trainen.")
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+
+        model = LogisticRegression()
+        model.fit(X_train_scaled, y_train)
+        y_pred = model.predict(X_test_scaled)
+
+        # --- Confusion matrix ---
+        st.subheader("Confusion Matrix")
+        cm = confusion_matrix(y_test, y_pred)
+        fig_cm, ax_cm = plt.subplots()
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
+                    xticklabels=["Dissatisfied","Satisfied"],
+                    yticklabels=["Dissatisfied","Satisfied"], ax=ax_cm)
+        ax_cm.set_xlabel("Predicted")
+        ax_cm.set_ylabel("Actual")
+        st.pyplot(fig_cm)
+
+        # --- Feature importance ---
+        st.subheader("Feature impact op tevredenheid")
+        coef = pd.Series(model.coef_[0], index=features)
+        fig_coef, ax_coef = plt.subplots()
+        coef.sort_values().plot(kind="barh", color=primary_color, ax=ax_coef)
+        ax_coef.set_xlabel("Coefficient (impact op kans Satisfied)")
+        st.pyplot(fig_coef)
+
+
 
 #-------------------page 3-----------------------------
 #------------------------------------------------------
