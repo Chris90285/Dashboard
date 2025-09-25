@@ -509,9 +509,7 @@ elif page == "Dashboard":
     # Title
     st.title("Tevredenheid per categorie als Radarchart")
 
-
     def plot_radar_chart(df, primary_color="royalblue"):
-        # Kolommen die meegenomen worden voor de radar chart
         factors = [
             "Departure and Arrival Time Convenience","Ease of Online Booking","Check-in Service","Online Boarding",
             "Gate Location","On-board Service","Seat Comfort","Leg Room Service","Cleanliness",
@@ -522,60 +520,49 @@ elif page == "Dashboard":
         # Gemiddelde scores berekenen
         mean_scores = df[factors].mean().values
 
-        # Radar chart voorbereiden
         N = len(factors)
         angles = np.linspace(0, 2*np.pi, N, endpoint=False).tolist()
         scores = mean_scores.tolist()
         scores += scores[:1]  # polygon sluiten
         angles += angles[:1]  # polygon sluiten
 
-        # Plot maken
         fig, ax = plt.subplots(figsize=(7,7), subplot_kw=dict(polar=True))
 
         # Lijn + vulling
         ax.plot(angles, scores, color=primary_color, linewidth=2)
         ax.fill(angles, scores, color=primary_color, alpha=0.25)
 
-        # Stippen bij elke score
+        # Stippen
         ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
 
         # Waarden buiten de cirkel zetten
-        r_outer = 5.4
+        r_outer = 6.2
         for angle, score in zip(angles, scores):
             y = r_outer
-            # handmatige correctie voor horizontale as (0° en 180°)
             if np.isclose(angle, 0) or np.isclose(angle, np.pi):
-                y += 0.2
+                y += 0.2  # kleine verschuiving voor horizontale scores
             ax.text(angle, y, f"{score:.1f}",
                     ha="center", va="center", fontsize=8, color="black")
 
-        # Labels rond de cirkel dichterbij de rand zetten
+        # Labels rond de cirkel
         ax.set_xticks(angles[:-1])
         ax.set_xticklabels(factors, fontsize=9)
-        for label in ax.get_xticklabels():
-            label.set_horizontalalignment("center")
         ax.tick_params(axis='x', pad=8)  # labels dichterbij de cirkel
 
-        # Y-as schaal forceren: 0 in het midden, 5 aan de rand
+        # Y-as schaal
         ax.set_ylim(0, 5)
-
-        # Rasters en schaal aanpassen
         ax.set_rlabel_position(30)
         ax.set_yticks([1, 2, 3, 4, 5])
         ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=7, color="gray")
         ax.grid(color="lightgray", linestyle="--")
 
-
+        plt.title("Gemiddelde scores per factor (Radar Chart)", size=12, pad=20)
         return fig
 
-    # -----------------------------
-    # In Streamlit gebruiken
-    # -----------------------------
-    # Voorbeeld: kleur uit sidebar gebruiken
-    # primary_color is in je code al bepaald via st.session_state
     fig = plot_radar_chart(df, primary_color=primary_color)
-    st.pyplot(fig)
+    st.pyplot(fig)   
 
+    
 
 #-------------------page 3-----------------------------
 #------------------------------------------------------
