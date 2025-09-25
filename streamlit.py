@@ -514,79 +514,79 @@ elif page == "Vliegtuig vs Trein":
     #-------------------Grafiek Koen vergelijking-------------
     #---------------------------------------------------------
 
-# Titel
-st.title("Vergelijking tevredenheid: Vliegtuigen ✈️ vs Treinen 🚄")
+    # Titel
+    st.title("Vergelijking tevredenheid: Vliegtuigen ✈️ vs Treinen 🚄")
 
-# Verwachte aspecten (labels)
-expected_aspects = [
-    "Ease of Online booking", "Checkin service", "Online boarding",
-    "Gate location", "On-board service", "Seat comfort",
-    "Leg room service", "Cleanliness", "Food and drink",
-    "Inflight service", "Inflight wifi service", "Inflight entertainment",
-    "Baggage handling"
-]
+    # Verwachte aspecten (labels)
+    expected_aspects = [
+        "Ease of Online booking", "Checkin service", "Online boarding",
+        "Gate location", "On-board service", "Seat comfort",
+        "Leg room service", "Cleanliness", "Food and drink",
+        "Inflight service", "Inflight wifi service", "Inflight entertainment",
+        "Baggage handling"
+    ]
 
-# Normaliseer kolomnamen voor robuuste matching
-import re
-def normalize(s: str) -> str:
-    return re.sub(r'[^a-z0-9]', '', str(s).lower())
+    # Normaliseer kolomnamen voor robuuste matching
+    import re
+    def normalize(s: str) -> str:
+        return re.sub(r'[^a-z0-9]', '', str(s).lower())
 
-def get_common_aspects(df1, df2, expected_aspects):
-    norm_to_col1 = {normalize(col): col for col in df1.columns}
-    norm_to_col2 = {normalize(col): col for col in df2.columns}
+    def get_common_aspects(df1, df2, expected_aspects):
+        norm_to_col1 = {normalize(col): col for col in df1.columns}
+        norm_to_col2 = {normalize(col): col for col in df2.columns}
 
-    common_aspects = []
-    for asp in expected_aspects:
-        norm = normalize(asp)
-        if norm in norm_to_col1 and norm in norm_to_col2:
-            common_aspects.append((asp, norm_to_col1[norm], norm_to_col2[norm]))
-    return common_aspects
+        common_aspects = []
+        for asp in expected_aspects:
+            norm = normalize(asp)
+            if norm in norm_to_col1 and norm in norm_to_col2:
+                common_aspects.append((asp, norm_to_col1[norm], norm_to_col2[norm]))
+        return common_aspects
 
-# Zoek overlappende aspecten tussen beide datasets
-common_aspects = get_common_aspects(df, df_extra_aangepast, expected_aspects)
+    # Zoek overlappende aspecten tussen beide datasets
+    common_aspects = get_common_aspects(df, df_extra_aangepast, expected_aspects)
 
-if not common_aspects:
-    st.warning("Geen gemeenschappelijke tevredenheidsaspecten gevonden.")
-else:
-    labels = [asp for asp, _, _ in common_aspects]
-
-    st.write("Tevredenheidsaspecten die in beide datasets voorkomen:")
-    st.write(", ".join(labels))
-
-    # Bereken gemiddelden voor beide datasets
-    results = []
-    for asp, col1, col2 in common_aspects:
-        if pd.api.types.is_numeric_dtype(df[col1]) and pd.api.types.is_numeric_dtype(df_extra_aangepast[col2]):
-            results.append({
-                "Aspect": asp,
-                "Dataset": "Vliegtuigen ✈️",
-                "Score": df[col1].mean()
-            })
-            results.append({
-                "Aspect": asp,
-                "Dataset": "Treinen 🚄",
-                "Score": df_extra_aangepast[col2].mean()
-            })
-
-    if results:
-        results_df = pd.DataFrame(results)
-
-        # Plot als grouped bar chart
-        import altair as alt
-        chart = (
-            alt.Chart(results_df)
-            .mark_bar()
-            .encode(
-                x=alt.X("Aspect:N", sort=labels),
-                y="Score:Q",
-                color="Dataset:N",
-                column=alt.Column("Aspect:N", sort=labels, header=alt.Header(labelAngle=-45))
-            )
-            .properties(width=80)
-        )
-        st.altair_chart(chart, use_container_width=True)
+    if not common_aspects:
+        st.warning("Geen gemeenschappelijke tevredenheidsaspecten gevonden.")
     else:
-        st.warning("Geen numerieke aspecten gevonden in beide datasets.")
+        labels = [asp for asp, _, _ in common_aspects]
+
+        st.write("Tevredenheidsaspecten die in beide datasets voorkomen:")
+        st.write(", ".join(labels))
+
+        # Bereken gemiddelden voor beide datasets
+        results = []
+        for asp, col1, col2 in common_aspects:
+            if pd.api.types.is_numeric_dtype(df[col1]) and pd.api.types.is_numeric_dtype(df_extra_aangepast[col2]):
+                results.append({
+                    "Aspect": asp,
+                    "Dataset": "Vliegtuigen ✈️",
+                    "Score": df[col1].mean()
+                })
+                results.append({
+                    "Aspect": asp,
+                    "Dataset": "Treinen 🚄",
+                    "Score": df_extra_aangepast[col2].mean()
+                })
+
+        if results:
+            results_df = pd.DataFrame(results)
+
+            # Plot als grouped bar chart
+            import altair as alt
+            chart = (
+                alt.Chart(results_df)
+                .mark_bar()
+                .encode(
+                    x=alt.X("Aspect:N", sort=labels),
+                    y="Score:Q",
+                    color="Dataset:N",
+                    column=alt.Column("Aspect:N", sort=labels, header=alt.Header(labelAngle=-45))
+                )
+                .properties(width=80)
+            )
+            st.altair_chart(chart, use_container_width=True)
+        else:
+            st.warning("Geen numerieke aspecten gevonden in beide datasets.")
 
 
 
