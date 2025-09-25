@@ -81,7 +81,7 @@ with st.sidebar:
 
     # Voeg laatst geupdate datum toe
     st.write("Voor het laatst geupdate op:")
-    st.write("*23:39 - 23 sep 2025*")
+    st.write("*15:56 - 25 sep 2025*")
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
@@ -527,7 +527,8 @@ elif page == "Data Overzicht":
     st.write("")
 
     st.write("Hieronder is het dataframe *Surveydata_test_(1).csv* te zien:")
-    st.write("Wissel met het dropdown menu tussen het originele en het aanghepaste dataset.")
+    st.write("Wissel met het dropdown menu tussen het originele en het aangepaste dataset.")
+    st.write("Zoals te zien is zijn de waardes omgezet naar een score tussen 0 en 5, waardoor er vergeleken kan worden met de scores van vliegtuigen.")
     # Dropdown om te kiezen welk dataframe te tonen
     selected_df = st.selectbox(
         "Kies een dataset om te bekijken:",
