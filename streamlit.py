@@ -509,63 +509,72 @@ elif page == "Dashboard":
     # Title
     st.title("Tevredenheid per categorie als Radarchart")
 
-    # Kolommen die meegenomen worden voor de radar chart
-    factors = [
-        "Departure and Arrival Time Convenience","Ease of Online Booking","Check-in Service","Online Boarding",
-        "Gate Location","On-board Service","Seat Comfort","Leg Room Service","Cleanliness",
-        "Food and Drink","In-flight Service","In-flight Wifi Service",
-        "In-flight Entertainment","Baggage Handling"
-    ]
 
-    # Gemiddelde scores berekenen
-    mean_scores = df[factors].mean().values
+    def plot_radar_chart(df, primary_color="royalblue"):
+        # Kolommen die meegenomen worden voor de radar chart
+        factors = [
+            "Departure and Arrival Time Convenience","Ease of Online Booking","Check-in Service","Online Boarding",
+            "Gate Location","On-board Service","Seat Comfort","Leg Room Service","Cleanliness",
+            "Food and Drink","In-flight Service","In-flight Wifi Service",
+            "In-flight Entertainment","Baggage Handling"
+        ]
 
-    # Radar chart voorbereiden
-    N = len(factors)
-    angles = np.linspace(0, 2*np.pi, N, endpoint=False).tolist()
-    scores = mean_scores.tolist()
-    scores += scores[:1]  # polygon sluiten
-    angles += angles[:1]  # polygon sluiten
+        # Gemiddelde scores berekenen
+        mean_scores = df[factors].mean().values
 
-    # Plot maken
-    fig, ax = plt.subplots(figsize=(7,7), subplot_kw=dict(polar=True))
+        # Radar chart voorbereiden
+        N = len(factors)
+        angles = np.linspace(0, 2*np.pi, N, endpoint=False).tolist()
+        scores = mean_scores.tolist()
+        scores += scores[:1]  # polygon sluiten
+        angles += angles[:1]  # polygon sluiten
 
-    # Kleur (consistent met dashboard)
-    primary_color = "royalblue"
+        # Plot maken
+        fig, ax = plt.subplots(figsize=(7,7), subplot_kw=dict(polar=True))
 
-    # Lijn + vulling
-    ax.plot(angles, scores, color=primary_color, linewidth=2)
-    ax.fill(angles, scores, color=primary_color, alpha=0.25)
+        # Lijn + vulling
+        ax.plot(angles, scores, color=primary_color, linewidth=2)
+        ax.fill(angles, scores, color=primary_color, alpha=0.25)
 
-    # Stippen bij elke score
-    ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
+        # Stippen bij elke score
+        ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
 
-    # Waarden buiten de cirkel zetten (vast op rand + marge)
-    r_outer = 6.5  
-    for angle, score in zip(angles, scores):
-        ax.text(angle, r_outer, f"{score:.1f}", 
-                ha="center", va="center", fontsize=8, color="black")
+        # Waarden buiten de cirkel zetten
+        r_outer = 5.4
+        for angle, score in zip(angles, scores):
+            y = r_outer
+            # handmatige correctie voor horizontale as (0° en 180°)
+            if np.isclose(angle, 0) or np.isclose(angle, np.pi):
+                y += 0.2
+            ax.text(angle, y, f"{score:.1f}",
+                    ha="center", va="center", fontsize=8, color="black")
 
-    # Labels rond de cirkel verder naar buiten zetten
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(factors, fontsize=9)
-    for label in ax.get_xticklabels():
-        label.set_horizontalalignment("center")
-    ax.tick_params(axis='x', pad=15)  # meer ruimte tussen labels en grafiek
+        # Labels rond de cirkel dichterbij de rand zetten
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(factors, fontsize=9)
+        for label in ax.get_xticklabels():
+            label.set_horizontalalignment("center")
+        ax.tick_params(axis='x', pad=8)  # labels dichterbij de cirkel
 
-    # Y-as schaal forceren: 0 in het midden, 5 aan de rand
-    ax.set_ylim(0, 5)
+        # Y-as schaal forceren: 0 in het midden, 5 aan de rand
+        ax.set_ylim(0, 5)
 
-    # Rasters en schaal aanpassen
-    ax.set_rlabel_position(30)
-    ax.set_yticks([1, 2, 3, 4, 5])
-    ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=7, color="gray")
-    ax.grid(color="lightgray", linestyle="--")
+        # Rasters en schaal aanpassen
+        ax.set_rlabel_position(30)
+        ax.set_yticks([1, 2, 3, 4, 5])
+        ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=7, color="gray")
+        ax.grid(color="lightgray", linestyle="--")
 
-    # Tonen in Streamlit
+
+        return fig
+
+    # -----------------------------
+    # In Streamlit gebruiken
+    # -----------------------------
+    # Voorbeeld: kleur uit sidebar gebruiken
+    # primary_color is in je code al bepaald via st.session_state
+    fig = plot_radar_chart(df, primary_color=primary_color)
     st.pyplot(fig)
-
-
 
 
 #-------------------page 3-----------------------------
