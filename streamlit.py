@@ -33,6 +33,8 @@ df_extra = load_extra_data()
 @st.cache_data
 def load_extra_data_aangepast():
     df_extra_aangepast = pd.read_csv("Train_Japan_Opgeschoond.csv", delimiter=";")
+    for col in df.select_dtypes(include=["int64", "float64"]).columns:
+        df[col] = df[col].fillna(df[col].median())
     return df_extra_aangepast
 
 df_extra_aangepast = load_extra_data_aangepast()
@@ -509,6 +511,86 @@ elif page == "Vliegtuig vs Trein":
     st.markdown(f"<h1 style='color:{primary_color}'🚝Klanttevredenheid Vliegtuig vs Trein</h1>", unsafe_allow_html=True)
     st.write("Hier is een vergelijking gemaakt tussen de klanttevredenheid van vliegtuigen (KLM) en treinen in Japan.")
 
+    #-------------------Grafiek Koen vergelijking-------------
+    #---------------------------------------------------------
+
+# Titel
+st.title("Vergelijking tevredenheid: Vliegtuigen ✈️ vs Treinen 🚄")
+
+# Verwachte aspecten (labels)
+expected_aspects = [
+    "Ease of Online booking", "Checkin service", "Online boarding",
+    "Gate location", "On-board service", "Seat comfort",
+    "Leg room service", "Cleanliness", "Food and drink",
+    "Inflight service", "Inflight wifi service", "Inflight entertainment",
+    "Baggage handling"
+]
+
+# Normaliseer kolomnamen voor robuuste matching
+import re
+def normalize(s: str) -> str:
+    return re.sub(r'[^a-z0-9]', '', str(s).lower())
+
+def get_common_aspects(df1, df2, expected_aspects):
+    norm_to_col1 = {normalize(col): col for col in df1.columns}
+    norm_to_col2 = {normalize(col): col for col in df2.columns}
+
+    common_aspects = []
+    for asp in expected_aspects:
+        norm = normalize(asp)
+        if norm in norm_to_col1 and norm in norm_to_col2:
+            common_aspects.append((asp, norm_to_col1[norm], norm_to_col2[norm]))
+    return common_aspects
+
+# Zoek overlappende aspecten tussen beide datasets
+common_aspects = get_common_aspects(df, df_extra_aangepast, expected_aspects)
+
+if not common_aspects:
+    st.warning("Geen gemeenschappelijke tevredenheidsaspecten gevonden.")
+else:
+    labels = [asp for asp, _, _ in common_aspects]
+
+    st.write("Tevredenheidsaspecten die in beide datasets voorkomen:")
+    st.write(", ".join(labels))
+
+    # Bereken gemiddelden voor beide datasets
+    results = []
+    for asp, col1, col2 in common_aspects:
+        if pd.api.types.is_numeric_dtype(df[col1]) and pd.api.types.is_numeric_dtype(df_extra_aangepast[col2]):
+            results.append({
+                "Aspect": asp,
+                "Dataset": "Vliegtuigen ✈️",
+                "Score": df[col1].mean()
+            })
+            results.append({
+                "Aspect": asp,
+                "Dataset": "Treinen 🚄",
+                "Score": df_extra_aangepast[col2].mean()
+            })
+
+    if results:
+        results_df = pd.DataFrame(results)
+
+        # Plot als grouped bar chart
+        import altair as alt
+        chart = (
+            alt.Chart(results_df)
+            .mark_bar()
+            .encode(
+                x=alt.X("Aspect:N", sort=labels),
+                y="Score:Q",
+                color="Dataset:N",
+                column=alt.Column("Aspect:N", sort=labels, header=alt.Header(labelAngle=-45))
+            )
+            .properties(width=80)
+        )
+        st.altair_chart(chart, use_container_width=True)
+    else:
+        st.warning("Geen numerieke aspecten gevonden in beide datasets.")
+
+
+
+
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
 elif page == "Data Overzicht":
@@ -529,6 +611,7 @@ elif page == "Data Overzicht":
     st.write("Hieronder is het dataframe *Surveydata_test_(1).csv* te zien:")
     st.write("Wissel met het dropdown menu tussen het originele en het aangepaste dataset.")
     st.write("Zoals te zien is zijn de waardes omgezet naar een score tussen 0 en 5, waardoor er vergeleken kan worden met de scores van vliegtuigen.")
+    st.write("Missende waardes zijn opgevuld met de mediaan van die kolom.")
     # Dropdown om te kiezen welk dataframe te tonen
     selected_df = st.selectbox(
         "Kies een dataset om te bekijken:",
