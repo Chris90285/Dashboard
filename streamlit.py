@@ -514,10 +514,7 @@ elif page == "Vliegtuig vs Trein":
     #-------------------Grafiek Koen vergelijking-------------
     #---------------------------------------------------------
 
-    # Titel
-    st.title("Vergelijking tevredenheid: Vliegtuigen ✈️ vs Treinen 🚄")
-
-    # Verwachte aspecten
+    # Verwachte aspecten (labels)
     expected_aspects = [
         "Ease of Online booking", "Checkin service", "Online boarding",
         "Gate location", "On-board service", "Seat comfort",
@@ -530,15 +527,15 @@ elif page == "Vliegtuig vs Trein":
     def normalize(s: str) -> str:
         return re.sub(r'[^a-z0-9]', '', str(s).lower())
 
-    def get_common_aspects(df1, df2, expected_aspects):
+    def get_common_aspects(df1: pd.DataFrame, df2: pd.DataFrame, expected_aspects):
         norm_to_col1 = {normalize(col): col for col in df1.columns}
         norm_to_col2 = {normalize(col): col for col in df2.columns}
-        common_aspects = []
+        common = []
         for asp in expected_aspects:
             norm = normalize(asp)
             if norm in norm_to_col1 and norm in norm_to_col2:
-                common_aspects.append((asp, norm_to_col1[norm], norm_to_col2[norm]))
-        return common_aspects
+                common.append((asp, norm_to_col1[norm], norm_to_col2[norm]))
+        return common
 
     common_aspects = get_common_aspects(df, df_extra_aangepast, expected_aspects)
 
@@ -546,46 +543,55 @@ elif page == "Vliegtuig vs Trein":
         st.warning("Geen gemeenschappelijke tevredenheidsaspecten gevonden.")
     else:
         labels = [asp for asp, _, _ in common_aspects]
-
         st.write("Tevredenheidsaspecten die in beide datasets voorkomen:")
         st.write(", ".join(labels))
 
-        # Multiselect UI
-        selected_labels = st.multiselect("Kies de aspecten die je wilt vergelijken:", options=labels, default=labels)
+        # Multiselect
+        selected_labels = st.multiselect(
+            "Kies de aspecten die je wilt vergelijken:",
+            options=labels,
+            default=labels
+        )
 
         results = []
-        for asp, col1, col2 in common_aspects:
+        for asp, col_air, col_train in common_aspects:
             if asp not in selected_labels:
                 continue
-            if pd.api.types.is_numeric_dtype(df[col1]) and pd.api.types.is_numeric_dtype(df_extra_aangepast[col2]):
-                results.append({
-                    "Aspect": asp,
-                    "Dataset": "Vliegtuigen ✈️",
-                    "Score": df[col1].mean()
-                })
-                results.append({
-                    "Aspect": asp,
-                    "Dataset": "Treinen 🚄",
-                    "Score": df_extra_aangepast[col2].mean()
-                })
 
-        if results:
+            s_air = pd.to_numeric(df[col_air], errors="coerce")
+            s_train = pd.to_numeric(df_extra_aangepast[col_train], errors="coerce")
+
+            if s_air.dropna().empty or s_train.dropna().empty:
+                continue
+
+            results.append({"Aspect": asp, "Dataset": "Vliegtuigen ✈️", "Score": round(s_air.mean(), 3)})
+            results.append({"Aspect": asp, "Dataset": "Treinen 🚄", "Score": round(s_train.mean(), 3)})
+
+        if not results:
+            st.warning("Geen numerieke data gevonden voor de gemeenschappelijke aspecten.")
+        else:
             results_df = pd.DataFrame(results)
+            results_df["Aspect"] = pd.Categorical(results_df["Aspect"], categories=labels, ordered=True)
 
+            # Altair chart
             chart = (
                 alt.Chart(results_df)
                 .mark_bar()
                 .encode(
-                    x=alt.X("Dataset:N", title="Dataset"),
+                    x=alt.X("Aspect:N", sort=labels, axis=alt.Axis(labelAngle=-45, labelFontSize=11)),
                     y=alt.Y("Score:Q", title="Gemiddelde score (0-5)"),
-                    color="Dataset:N",
-                    column=alt.Column("Aspect:N", sort=labels, header=alt.Header(labelAngle=-45))
+                    color=alt.Color("Dataset:N", legend=alt.Legend(title="Dataset")),
+                    xOffset="Dataset:N",
+                    tooltip=["Aspect", "Dataset", "Score"]
                 )
-                .properties(width=100)
+                .properties(height=420)
             )
             st.altair_chart(chart, use_container_width=True)
-        else:
-            st.warning("Geen numerieke aspecten gevonden in beide datasets.")
+
+            # Tabel
+            pivot = results_df.pivot(index="Aspect", columns="Dataset", values="Score").reindex(labels)
+            st.dataframe(pivot.round(3))
+
 
 
 #-------------------page 4-----------------------------
