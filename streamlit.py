@@ -610,7 +610,7 @@ elif page == "Dashboard":
     # Feature engineering
     df_model["Is_Delayed"] = (df_model["Total Delay"] > 15).astype(int)
     df_model = df_model.dropna(subset=["Satisfaction_Avg"])
-    df_model["Satisfied"] = (df_model["Satisfaction_Avg"] >= 4).astype(int)
+    df_model["Satisfied"] = (df_model["Satisfaction_Avg"] >= 3.5).astype(int)
 
     # --------------------
     # Afhankelijke dropdowns
@@ -649,8 +649,8 @@ elif page == "Dashboard":
     if len(df_filtered_model) == 0:
         st.warning("Geen data beschikbaar voor deze selectie.")
     else:
-        prob_satisfied = df_filtered_model["Satisfied"].mean()
-        st.write(f"Op basis van de geselecteerde filters is de kans dat een passagier tevreden is: **{prob_satisfied:.2f}**")
+        prob_satisfied = df_filtered_model["Satisfied"].mean()*100
+        st.write(f"Op basis van de geselecteerde filters is de kans dat een passagier tevreden is (Satisfaction ≥ 3.5): **{prob_satisfied:.1f}%**")
 
 #-------------------page 3-----------------------------
 #------------------------------------------------------
