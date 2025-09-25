@@ -506,8 +506,37 @@ elif page == "Dashboard":
     st.write(f"Geselecteerde vlucht afstand: {min_dist} - {max_dist}")
     #-------------------Grafiek Lieke 2-----------------------
     #---------------------------------------------------------
-    # Title
+
+    # Titel
     st.title("Tevredenheid per categorie als Radarchart")
+
+    # --- Leeftijdsfilter ---
+    st.markdown("### Leeftijdsfilter")
+    age_range_radar = st.slider(
+        "Leeftijdsbereik (Radar Chart)",
+        int(df["Age"].min()),
+        int(df["Age"].max()),
+        (int(df["Age"].min()), int(df["Age"].max())),
+        key="age_range_radar"
+    )
+    min_age_radar, max_age_radar = age_range_radar
+
+    # --- Afstandsfilter ---
+    st.markdown("### Vlucht Afstand Filter")
+    distance_range_radar = st.slider(
+        "Afstandsbereik (Flight Distance) (Radar Chart)",
+        int(df["Flight Distance"].min()),
+        int(df["Flight Distance"].max()),
+        (int(df["Flight Distance"].min()), int(df["Flight Distance"].max())),
+        key="distance_range_radar"
+    )
+    min_dist_radar, max_dist_radar = distance_range_radar
+
+    # Data filteren
+    df_radar = df[
+        (df["Age"] >= min_age_radar) & (df["Age"] <= max_age_radar) &
+        (df["Flight Distance"] >= min_dist_radar) & (df["Flight Distance"] <= max_dist_radar)
+    ]
 
     def plot_radar_chart(df, primary_color="royalblue"):
         factors = [
@@ -517,14 +546,20 @@ elif page == "Dashboard":
             "In-flight Entertainment","Baggage Handling"
         ]
 
-        # Gemiddelde scores berekenen
+        if df.empty:
+            fig, ax = plt.subplots()
+            ax.text(0.5, 0.5, "Geen data beschikbaar\nna filtering", 
+                    ha="center", va="center", fontsize=12, color="red")
+            ax.axis("off")
+            return fig
+
         mean_scores = df[factors].mean().values
 
         N = len(factors)
         angles = np.linspace(0, 2*np.pi, N, endpoint=False).tolist()
         scores = mean_scores.tolist()
-        scores += scores[:1]  # polygon sluiten
-        angles += angles[:1]  # polygon sluiten
+        scores += scores[:1]
+        angles += angles[:1]
 
         fig, ax = plt.subplots(figsize=(7,7), subplot_kw=dict(polar=True))
 
@@ -535,25 +570,20 @@ elif page == "Dashboard":
         # Stippen
         ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
 
-        # Waarden buiten de cirkel zetten
+        # Waarden buiten de cirkel
         r_outer = 6.2
         for angle, score in zip(angles, scores):
             y = r_outer
-
-            # hoek in graden berekenen
             deg = np.degrees(angle) % 360  
-
-            
             if abs(deg - 0) < 1 or abs(deg - 180) < 1:
-                y += 3  # duw de tekst iets verder naar buiten
-
+                y += 2
             ax.text(angle, y, f"{score:.1f}",
                     ha="center", va="center", fontsize=8, color="black")
 
         # Labels rond de cirkel
         ax.set_xticks(angles[:-1])
         ax.set_xticklabels(factors, fontsize=9)
-        ax.tick_params(axis='x', pad=8)  # labels dichterbij de cirkel
+        ax.tick_params(axis='x', pad=8)
 
         # Y-as schaal
         ax.set_ylim(0, 5)
@@ -564,10 +594,11 @@ elif page == "Dashboard":
 
         return fig
 
-    fig = plot_radar_chart(df, primary_color=primary_color)
-    st.pyplot(fig)   
+    fig = plot_radar_chart(df_radar, primary_color=primary_color)
+    st.pyplot(fig)
 
-    
+
+ 
 
 #-------------------page 3-----------------------------
 #------------------------------------------------------
