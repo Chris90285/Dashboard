@@ -510,6 +510,8 @@ elif page == "Dashboard":
 elif page == "Vliegtuig vs Trein":
     st.markdown(f"<h1 style='color:{primary_color}'🚝Klanttevredenheid Vliegtuig vs Trein</h1>", unsafe_allow_html=True)
     st.write("Hier is een vergelijking gemaakt tussen de klanttevredenheid van vliegtuigen (KLM) en treinen in Japan.")
+    # Titel
+    st.title("Tevredenheid per categorie - Vliegtuig vs Trein")
 
     #-------------------Grafiek Koen vergelijking-------------
     #---------------------------------------------------------
@@ -543,8 +545,7 @@ elif page == "Vliegtuig vs Trein":
         st.warning("Geen gemeenschappelijke tevredenheidsaspecten gevonden.")
     else:
         labels = [asp for asp, _, _ in common_aspects]
-        st.write("Tevredenheidsaspecten die in beide datasets voorkomen:")
-        st.write(", ".join(labels))
+
 
         # Multiselect (standaard: alle aspecten)
         selected_labels = st.multiselect(
@@ -591,12 +592,6 @@ elif page == "Vliegtuig vs Trein":
             )
 
             st.altair_chart(chart, use_container_width=True)
-
-            # Tabel met scores
-            pivot = results_df.pivot(index="Aspect", columns="Dataset", values="Score").reindex(ordered_labels)
-            st.dataframe(pivot.round(3))
-
-
 
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
