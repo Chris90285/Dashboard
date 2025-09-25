@@ -32,7 +32,7 @@ df_extra = load_extra_data()
 #Aangepast train data set
 @st.cache_data
 def load_extra_data_aangepast():
-    df_extra_aangepast = pd.read_csv("Train_Japan_Opgeschoond.csv", delimiter=";")
+    df_extra_aangepast = pd.read_csv("Train_Japan_Opgeschoond1.csv", delimiter=";")
     for col in df.select_dtypes(include=["int64", "float64"]).columns:
         df[col] = df[col].fillna(df[col].median())
     return df_extra_aangepast
@@ -521,6 +521,7 @@ elif page == "Vliegtuig vs Trein":
         "Inflight service", "Inflight wifi service", "Inflight entertainment",
         "Baggage handling"
     ]
+
 
     def normalize(s: str) -> str:
         s = str(s).lower()
