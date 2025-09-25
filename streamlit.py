@@ -535,14 +535,20 @@ elif page == "Dashboard":
         # Stippen
         ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
 
-        # Waarden buiten de cirkel zetten
-        r_outer = 6.2
-        for angle, score in zip(angles, scores):
-            y = r_outer
-            if np.isclose(angle, 0) or np.isclose(angle, np.pi):
-                y += 0.2  # kleine verschuiving voor horizontale scores
-            ax.text(angle, y, f"{score:.1f}",
-                    ha="center", va="center", fontsize=8, color="black")
+    # Waarden buiten de cirkel zetten
+    r_outer = 6.2
+    for angle, score in zip(angles, scores):
+        y = r_outer
+
+        # hoek in graden berekenen
+        deg = np.degrees(angle) % 360  
+
+        
+        if abs(deg - 0) < 1 or abs(deg - 180) < 1:
+            y += 1  # duw de tekst iets verder naar buiten
+
+        ax.text(angle, y, f"{score:.1f}",
+                ha="center", va="center", fontsize=8, color="black")
 
         # Labels rond de cirkel
         ax.set_xticks(angles[:-1])
