@@ -87,7 +87,7 @@ with st.sidebar:
 
 #-------------------stijlinstellingen-------------------
 #-------------------------------------------------------
-stijl = st.session_state["stijl"]  # veilige kopie uit session_state
+stijl = st.session_state["stijl"]  
 
 if stijl == "KLM Blauw":
     primary_color = "royalblue"
@@ -427,7 +427,7 @@ elif page == "Dashboard":
     st.title("Tevredenheid en vertraging")
 
     # ======================
-    # Rating maar één keer berekenen (beter in load_data())
+    # Rating  berekenen 
     # ======================
     if "rating" not in df.columns:
         rating_cols = [
@@ -638,14 +638,14 @@ elif page == "Dashboard":
     df_filtered_model = df_filtered_model[(df_filtered_model["Age"] >= age_range[0]) & (df_filtered_model["Age"] <= age_range[1])]
 
     # --------------------
-    # Total Delay filter (nieuwe slider)
+    # Total Delay filter 
     # --------------------
     max_total_delay = int(df_filtered_model["Total Delay"].max())
     total_delay_range = st.slider("Totale vertraging (minuten):", 0, max_total_delay, (0, max_total_delay))
     df_filtered_model = df_filtered_model[(df_filtered_model["Total Delay"] >= total_delay_range[0]) & 
                                         (df_filtered_model["Total Delay"] <= total_delay_range[1])]
 
-    # Simpel model: kans dat passagier tevreden is
+    # Kans dat passagier tevreden is
     if len(df_filtered_model) == 0:
         st.warning("Geen data beschikbaar voor deze selectie.")
     else:
@@ -729,7 +729,7 @@ elif page == "Vliegtuig vs Trein":
             ordered_labels = [l for l in labels if l in selected_labels]
             results_df["Aspect"] = pd.Categorical(results_df["Aspect"], categories=ordered_labels, ordered=True)
 
-            # Groeperende staafdiagram (side-by-side per aspect)
+            # Groeperende staafdiagram 
             chart = (
                 alt.Chart(results_df)
                 .mark_bar()
@@ -751,7 +751,7 @@ elif page == "Vliegtuig vs Trein":
     if not results_df.empty:
         st.title("Tevredenheid per categorie - Vliegtuig vs Trein als Radarchart")
 
-        # Pivoteren zodat we per dataset een rij hebben
+        # pivot maken
         radar_df = results_df.pivot(index="Dataset", columns="Aspect", values="Score")
 
         categories = radar_df.columns.tolist()
@@ -850,7 +850,7 @@ Gegevens van passagiers zoals leeftijd, geslacht, reisklasse, afstand, vertrek- 
 - **Scatterplot vertraging:** Arrival vs Departure Delay, gekleurd op gemiddelde rating.
 
 **Voorspellend model:**  
-Er is een simpel voorspellend model gemaakt dat de kans berekent dat een passagier tevreden is (**Satisfaction_Avg ≥ 4**).  
+Er is een simpel voorspellend model gemaakt dat de kans berekent dat een passagier tevreden is (**Satisfaction_Avg ≥ 3.5**).  
 - **Feature engineering:**  
   - `Is_Delayed` = 1 als totale vertraging > 15 minuten, anders 0.  
   - Filters voor klasse, geslacht, leeftijd en totale vertraging.  
