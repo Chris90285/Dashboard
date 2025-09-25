@@ -852,7 +852,7 @@ Gegevens van passagiers zoals leeftijd, geslacht, reisklasse, afstand, vertrek- 
 - **Scatterplot vertraging:** Arrival vs Departure Delay, gekleurd op gemiddelde rating.  
 
 **Voorspellend model:**  
-Het model berekent de kans dat een passagier tevreden is (**Satisfaction_Avg ≥ 4**).  
+Het model berekent de kans dat een passagier tevreden is (**Satisfaction_Avg ≥ 3.5**).  
 - **Feature engineering:**  
   - `Is_Delayed` = 1 als de passagier meer dan 15 minuten vertraging had, anders 0.  
   - Houdt rekening met **klasse**, **geslacht**, **leeftijd** en **totale vertraging**.  
@@ -873,7 +873,6 @@ Ervaring van treinreizigers, met nadruk op comfort, punctualiteit en tevredenhei
 ---
 
 #### Conclusie
-- Klasse, comfort en ruimte beïnvloeden tevredenheid sterk.  
-- Leeftijd en geslacht spelen een kleinere, maar soms merkbare rol.  
+- Klasse, comfort en ruimte beïnvloeden tevredenheid sterk.   
 - Algemene tevredenheid bij treinen ligt iets hoger dan bij vliegtuigen.
 """)
