@@ -697,30 +697,28 @@ elif page == "Vliegtuig vs Trein":
     #--------------Radar chart vergelijking -----------------
     #---------------------------------------------------------
     if not results_df.empty:
-        # Titel
-        st.title("Tevredenheid per categorie - Vliegtuig vs Trein als Radarchart")
+        st.title("Tevredenheid per categorie - Vliegtuig vs Trein als Radarchart 🚄")
 
         # Pivoteren zodat we per dataset een rij hebben
         radar_df = results_df.pivot(index="Dataset", columns="Aspect", values="Score")
 
         categories = radar_df.columns.tolist()
+        categories_closed = categories + [categories[0]]
 
-        fig_radar = go.Figure()
+        fig_compare_radar = go.Figure()
 
         for dataset in radar_df.index:
             values = radar_df.loc[dataset].tolist()
-            # Sluit de cirkel
-            values += values[:1]
-            categories_closed = categories + [categories[0]]
+            values += values[:1]  # cirkel sluiten
 
-            fig_radar.add_trace(go.Scatterpolar(
+            fig_compare_radar.add_trace(go.Scatterpolar(
                 r=values,
                 theta=categories_closed,
                 fill='toself',
                 name=dataset
             ))
 
-        fig_radar.update_layout(
+        fig_compare_radar.update_layout(
             polar=dict(
                 radialaxis=dict(
                     visible=True,
@@ -730,7 +728,8 @@ elif page == "Vliegtuig vs Trein":
             showlegend=True
         )
 
-        st.plotly_chart(fig_radar, use_container_width=True)
+        st.plotly_chart(fig_compare_radar, use_container_width=True)
+
 
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
