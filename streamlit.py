@@ -831,8 +831,9 @@ elif page == "Toelichting":
     st.markdown("""
     **Introductie**
 
-    Voor dit project zijn datasets van Kaggle gebruikt: één over KLM-vluchten en één over treinen in Japan. Het doel is inzicht te krijgen in klanttevredenheid en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden, zoals klasse, comfort, leeftijd en vertraging.  
-    LET OP: Het airline dataset gaat niet over KLM, de naam is door ons toegevoegd ter illustratie.
+    Voor dit project zijn datasets van Kaggle gebruikt: één over KLM-vluchten en één over treinen in Japan. Het doel is inzicht te krijgen in klanttevredenheid en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden, zoals klasse, comfort, leeftijd en vertraging. 
+                 
+    *LET OP: Het airline dataset gaat niet over KLM, de naam is door ons toegevoegd ter illustratie.*
 
     ---
 
