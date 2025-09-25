@@ -513,7 +513,7 @@ elif page == "Dashboard":
     # --- Leeftijdsfilter ---
     st.markdown("### Leeftijdsfilter")
     age_range_radar = st.slider(
-        "Leeftijdsbereik (Radar Chart)",
+        "Leeftijdsbereik",
         int(df["Age"].min()),
         int(df["Age"].max()),
         (int(df["Age"].min()), int(df["Age"].max())),
@@ -524,7 +524,7 @@ elif page == "Dashboard":
     # --- Afstandsfilter ---
     st.markdown("### Vlucht Afstand Filter")
     distance_range_radar = st.slider(
-        "Afstandsbereik (Flight Distance) (Radar Chart)",
+        "Afstandsbereik (Flight Distance)",
         int(df["Flight Distance"].min()),
         int(df["Flight Distance"].max()),
         (int(df["Flight Distance"].min()), int(df["Flight Distance"].max())),
@@ -733,4 +733,60 @@ elif page == "Data Overzicht":
 #-------------------------------------------------------
 elif page == "Werkwijze":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Werkwijze</h1>", unsafe_allow_html=True)
-    st.write("Hier komt een beschrijving van hoe wij te werk zijn gegaan.")
+    st.write("")
+    st.markdown("""
+    ### Introductie
+
+    Voor dit project hebben we Kaggle gebruikt om datasets te verzamelen. We hebben drie datasets gekozen, waarvan we er uiteindelijk twee hebben gebruikt: één over tevredenheid bij KLM-vluchten en één over treinen in Japan.
+
+    ### Doel
+    Het doel is om inzicht te krijgen in klanttevredenheid binnen transport, en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden. We willen ook nagaan of er verschillen zijn in tevredenheid tussen geslacht en klasse (bijvoorbeeld economy vs. business).
+
+    ---
+
+    ####  KLM-vluchten
+
+    **Dataset:**  
+    Bevat gegevens over passagiers, zoals leeftijd, geslacht, reisklasse, afstand, vertrek- en aankomstgegevens, en scores voor verschillende aspecten van tevredenheid.  
+    **Belangrijke factoren:** zitcomfort, eten en drinken, gebruiksgemak online boeken, beenruimte, online inchecken, netheid, inflight wifi, boarding, entertainment, bagageafhandeling.
+
+    **Visualisaties:**
+    - **Scatterplot – Leeftijd vs Afstand**  
+    Laat zien of er een patroon is tussen leeftijd van passagiers en de lengte van de vlucht.  
+    Extra informatie kan zichtbaar worden door punten te kleuren naar klasse of tevredenheid.
+    - **Boxplot – Tevredenheid vs Geslacht en Klasse**  
+    Vergelijk de tevredenheidsscores tussen mannen en vrouwen, en tussen economy en businessclass.
+    - **Staafdiagram – Zitruimte vs Tevredenheid**  
+    Analyseert het verband tussen de hoeveelheid beenruimte en de tevredenheid van passagiers.
+    - **Histogram – Tevredenheid (vergelijking vluchten vs treinen)**  
+    Laat de verdeling van tevredenheidsscores zien voor KLM-vluchten in vergelijking met Japanse treinen.
+
+    ---
+
+    #### 🚄 Japanse treinen
+
+    **Dataset:**  
+    Bevat informatie over reizigerservaringen, met nadruk op comfort, punctualiteit en tevredenheid.
+
+    **Visualisaties:**
+    - **Scatterplot – Leeftijd vs Reistijd**  
+    Laat zien of leeftijd samenhangt met de lengte van de reis.  
+    Hiermee kan inzichtelijk worden gemaakt of bepaalde leeftijdsgroepen langere of kortere treinen nemen.
+    - **Histogram – Tevredenheid (vergelijking vluchten vs treinen)**  
+    Vergelijking van de verdeling van tevredenheid tussen Japanse treinen en KLM-vluchten.
+
+    ---
+
+    ####  Beperkingen
+    - KLM-dataset bevat alleen passagiers van één luchtvaartmaatschappij, dus niet representatief voor de gehele luchtvaart.  
+    - Japanse dataset is beperkt tot één land.  
+    - Subjectieve scores: tevredenheid is persoonlijk en kan per individu verschillen.  
+    - De derde dataset die we hadden gekozen, is niet gebruikt vanwege beperkte variabelen.
+
+    ---
+
+    ####  Conclusie
+    - Zowel bij KLM-vluchten als bij Japanse treinen speelt klasse, comfort en ruimte een belangrijke rol in tevredenheid.  
+    - Leeftijd en geslacht hebben een kleinere invloed, maar zijn soms merkbaar bij specifieke aspecten zoals comfort en netheid.  
+    - Histogrammen tonen dat de algemene tevredenheid bij treinen iets hoger ligt dan bij vluchten, mogelijk door hogere punctualiteit en comfort.
+    """)
