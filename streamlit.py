@@ -738,6 +738,7 @@ elif page == "Vliegtuig vs Trein":
 elif page == "Data Overzicht":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Data Overzicht</h1>", unsafe_allow_html=True)
     st.write("Op deze pagina zijn de gebruikte datasets te vinden. Onder ieder dataset staat de bijbehorende bron.")
+    st.write("### Vliegtuig")
     st.write("Hieronder is het  dataframe *airline_passenger_satisfaction.csv* te zien:")
     # Main dataframe laten zien
     st.dataframe(df)
@@ -750,6 +751,7 @@ elif page == "Data Overzicht":
     st.write("")
     st.write("")
 
+    st.write("### Trein")
     st.write("Hieronder is het dataframe *Surveydata_test_(1).csv* te zien:")
     st.write("Wissel met het dropdown menu tussen het originele en het aangepaste dataset.")
     st.write("Zoals te zien is zijn de waardes omgezet naar een score tussen 0 en 5, waardoor er vergeleken kan worden met de scores van vliegtuigen.")
