@@ -541,7 +541,7 @@ elif page == "Dashboard":
     ax.scatter(angles, scores, color=primary_color, s=40, zorder=5)
 
     # Waarden buiten de cirkel zetten (vast op rand + marge)
-    r_outer = 10  
+    r_outer = 6.5  
     for angle, score in zip(angles, scores):
         ax.text(angle, r_outer, f"{score:.1f}", 
                 ha="center", va="center", fontsize=8, color="black")
