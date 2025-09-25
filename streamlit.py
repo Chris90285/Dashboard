@@ -510,8 +510,7 @@ elif page == "Dashboard":
 elif page == "Vliegtuig vs Trein":
     st.markdown(f"<h1 style='color:{primary_color}'🚝Klanttevredenheid Vliegtuig vs Trein</h1>", unsafe_allow_html=True)
     st.write("Hier is een vergelijking gemaakt tussen de klanttevredenheid van vliegtuigen (KLM) en treinen in Japan.")
-    # Titel
-    st.title("Tevredenheid per categorie - Vliegtuig vs Trein")
+    
 
     #-------------------Grafiek Koen vergelijking-------------
     #---------------------------------------------------------
