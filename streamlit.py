@@ -832,7 +832,7 @@ elif page == "Toelichting":
 ### Introductie
 
 Voor dit project zijn datasets van Kaggle gebruikt: één over KLM-vluchten en één over treinen in Japan. Het doel is inzicht te krijgen in klanttevredenheid en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden, zoals klasse, comfort, leeftijd en vertraging.
-
+LET OP: Het airline dataset gaat niet over KLM, de naam is door ons toegevoegd ter illustratie.
 ---
 
 #### KLM-vluchten
@@ -870,16 +870,8 @@ Ervaring van treinreizigers, met nadruk op comfort, punctualiteit en tevredenhei
 
 ---
 
-#### Beperkingen
-- KLM-dataset beperkt tot één luchtvaartmaatschappij.  
-- Japanse dataset beperkt tot één land.  
-- Subjectieve scores: tevredenheid kan per persoon verschillen.  
-- Derde dataset niet gebruikt wegens beperkte variabelen.
-
----
-
 #### Conclusie
 - Klasse, comfort en ruimte beïnvloeden tevredenheid sterk.  
 - Leeftijd en geslacht spelen een kleinere, maar soms merkbare rol.  
-- Algemene tevredenheid bij treinen ligt iets hoger, mogelijk door hogere punctualiteit en comfort.
+- Algemene tevredenheid bij treinen ligt iets hoger dan bij vliegtuigen.
 """)
