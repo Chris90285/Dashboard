@@ -697,7 +697,7 @@ elif page == "Vliegtuig vs Trein":
     #--------------Radar chart vergelijking -----------------
     #---------------------------------------------------------
     if not results_df.empty:
-        st.title("Tevredenheid per categorie - Vliegtuig vs Trein als Radarchart 🚄")
+        st.title("Tevredenheid per categorie - Vliegtuig vs Trein als Radarchart")
 
         # Pivoteren zodat we per dataset een rij hebben
         radar_df = results_df.pivot(index="Dataset", columns="Aspect", values="Score")
@@ -725,7 +725,9 @@ elif page == "Vliegtuig vs Trein":
                     range=[0, 5]
                 )
             ),
-            showlegend=True
+            showlegend=True,
+            width=800,
+            height=800
         )
 
         st.plotly_chart(fig_compare_radar, use_container_width=True)
