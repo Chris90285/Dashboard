@@ -603,6 +603,7 @@ elif page == "Dashboard":
     # Title
     st.title("Voorspelling van klanttevredenheid")
 
+
     # Maak een kopie van df
     df_model = df.copy()
 
@@ -636,13 +637,20 @@ elif page == "Dashboard":
     age_range = st.slider("Leeftijdsbereik:", min_age, max_age, (min_age, max_age))
     df_filtered_model = df_filtered_model[(df_filtered_model["Age"] >= age_range[0]) & (df_filtered_model["Age"] <= age_range[1])]
 
+    # --------------------
+    # Total Delay filter (nieuwe slider)
+    # --------------------
+    max_total_delay = int(df_filtered_model["Total Delay"].max())
+    total_delay_range = st.slider("Totale vertraging (minuten):", 0, max_total_delay, (0, max_total_delay))
+    df_filtered_model = df_filtered_model[(df_filtered_model["Total Delay"] >= total_delay_range[0]) & 
+                                        (df_filtered_model["Total Delay"] <= total_delay_range[1])]
+
     # Simpel model: kans dat passagier tevreden is
     if len(df_filtered_model) == 0:
         st.warning("Geen data beschikbaar voor deze selectie.")
     else:
         prob_satisfied = df_filtered_model["Satisfied"].mean()
         st.write(f"Op basis van de geselecteerde filters is de kans dat een passagier tevreden is: **{prob_satisfied:.2f}**")
-
 
 #-------------------page 3-----------------------------
 #------------------------------------------------------
@@ -821,58 +829,57 @@ elif page == "Toelichting":
     st.markdown(f"<h1 style='color:{primary_color}'>✎ Toelichting</h1>", unsafe_allow_html=True)
     st.write("")
     st.markdown("""
-    ### Introductie
+### Introductie
 
-    Voor dit project hebben we Kaggle gebruikt om datasets te verzamelen. We hebben drie datasets gekozen, waarvan we er uiteindelijk twee hebben gebruikt: één over tevredenheid bij KLM-vluchten en één over treinen in Japan.
+Voor dit project zijn datasets van Kaggle gebruikt: één over KLM-vluchten en één over treinen in Japan. Het doel is inzicht te krijgen in klanttevredenheid en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden, zoals klasse, comfort, leeftijd en vertraging.
 
-    ### Doel
-    Het doel is om inzicht te krijgen in klanttevredenheid binnen transport, en te onderzoeken welke factoren de ervaring van reizigers beïnvloeden. We willen ook nagaan of er verschillen zijn in tevredenheid tussen geslacht en klasse (bijvoorbeeld economy vs. business).
+---
 
-    ---
+#### KLM-vluchten
 
-    ####  KLM-vluchten
+**Dataset:**  
+Gegevens van passagiers zoals leeftijd, geslacht, reisklasse, afstand, vertrek- en aankomstvertragingen en scores op tevredenheidsaspecten.
 
-    **Dataset:**  
-    Bevat gegevens over passagiers, zoals leeftijd, geslacht, reisklasse, afstand, vertrek- en aankomstgegevens, en scores voor verschillende aspecten van tevredenheid.  
-    **Belangrijke factoren:** zitcomfort, eten en drinken, gebruiksgemak online boeken, beenruimte, online inchecken, netheid, inflight wifi, boarding, entertainment, bagageafhandeling.
+**Visualisaties:**
+- **Scatterplot – Leeftijd vs Afstand:** laat verband zien tussen leeftijd en vluchtafstand.
+- **Boxplot – Tevredenheid vs Geslacht en Klasse:** vergelijkt tevredenheid tussen mannen/vrouwen en economy/businessclass.
+- **Staafdiagram – Tevredenheid per aspect:** analyseert verschillende aspecten zoals zitcomfort, eten en drinken, inflight service.
+- **Gemiddelde tevredenheid per categorie:** toont staafdiagram en radar chart voor categorieën zoals service, comfort en entertainment.
+- **KPI-indicatoren:** totaal passagiers, gemiddelde tevredenheid, vertrek- en aankomstvertragingen, percentage vertraagde vluchten.
+- **Histogram – Tevredenheid:** verdeling van scores bij KLM-vluchten.
+- **Scatterplot vertraging:** Arrival vs Departure Delay, gekleurd op gemiddelde rating.
 
-    **Visualisaties:**
-    - **Scatterplot – Leeftijd vs Afstand**  
-    Laat zien of er een patroon is tussen leeftijd van passagiers en de lengte van de vlucht.  
-    Extra informatie kan zichtbaar worden door punten te kleuren naar klasse of tevredenheid.
-    - **Boxplot – Tevredenheid vs Geslacht en Klasse**  
-    Vergelijk de tevredenheidsscores tussen mannen en vrouwen, en tussen economy en businessclass.
-    - **Staafdiagram – Zitruimte vs Tevredenheid**  
-    Analyseert het verband tussen de hoeveelheid beenruimte en de tevredenheid van passagiers.
-    - **Histogram – Tevredenheid (vergelijking vluchten vs treinen)**  
-    Laat de verdeling van tevredenheidsscores zien voor KLM-vluchten in vergelijking met Japanse treinen.
+**Voorspellend model:**  
+Er is een simpel voorspellend model gemaakt dat de kans berekent dat een passagier tevreden is (**Satisfaction_Avg ≥ 4**).  
+- **Feature engineering:**  
+  - `Is_Delayed` = 1 als totale vertraging > 15 minuten, anders 0.  
+  - Filters voor klasse, geslacht, leeftijd en totale vertraging.  
+- **Output:** kans op tevredenheid gebaseerd op de geselecteerde filters.
 
-    ---
+---
 
-    ####  Japanse treinen
+#### Japanse treinen
 
-    **Dataset:**  
-    Bevat informatie over reizigerservaringen, met nadruk op comfort, punctualiteit en tevredenheid.
+**Dataset:**  
+Ervaring van treinreizigers, met nadruk op comfort, punctualiteit en tevredenheid.
 
-    **Visualisaties:**
-    - **Scatterplot – Leeftijd vs Reistijd**  
-    Laat zien of leeftijd samenhangt met de lengte van de reis.  
-    Hiermee kan inzichtelijk worden gemaakt of bepaalde leeftijdsgroepen langere of kortere treinen nemen.
-    - **Histogram – Tevredenheid (vergelijking vluchten vs treinen)**  
-    Vergelijking van de verdeling van tevredenheid tussen Japanse treinen en KLM-vluchten.
+**Visualisaties:**
+- **Scatterplot – Leeftijd vs Reistijd:** inzicht in leeftijdsgroepen en reistijd.
+- **Histogram – Tevredenheid:** vergelijking van tevredenheid tussen treinen en KLM-vluchten.
+- **Radar chart vergelijking:** overzicht van scores per aspect voor treinen vs vliegtuigen.
 
-    ---
+---
 
-    ####  Beperkingen
-    - KLM-dataset bevat alleen passagiers van één luchtvaartmaatschappij, dus niet representatief voor de gehele luchtvaart.  
-    - Japanse dataset is beperkt tot één land.  
-    - Subjectieve scores: tevredenheid is persoonlijk en kan per individu verschillen.  
-    - De derde dataset die we hadden gekozen, is niet gebruikt vanwege beperkte variabelen.
+#### Beperkingen
+- KLM-dataset beperkt tot één luchtvaartmaatschappij.  
+- Japanse dataset beperkt tot één land.  
+- Subjectieve scores: tevredenheid kan per persoon verschillen.  
+- Derde dataset niet gebruikt wegens beperkte variabelen.
 
-    ---
+---
 
-    ####  Conclusie
-    - Zowel bij KLM-vluchten als bij Japanse treinen speelt klasse, comfort en ruimte een belangrijke rol in tevredenheid.  
-    - Leeftijd en geslacht hebben een kleinere invloed, maar zijn soms merkbaar bij specifieke aspecten zoals comfort en netheid.  
-    - Histogrammen tonen dat de algemene tevredenheid bij treinen iets hoger ligt dan bij vluchten, mogelijk door hogere punctualiteit en comfort.
-    """)
+#### Conclusie
+- Klasse, comfort en ruimte beïnvloeden tevredenheid sterk.  
+- Leeftijd en geslacht spelen een kleinere, maar soms merkbare rol.  
+- Algemene tevredenheid bij treinen ligt iets hoger, mogelijk door hogere punctualiteit en comfort.
+""")
