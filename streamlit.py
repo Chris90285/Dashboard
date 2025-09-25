@@ -115,7 +115,7 @@ if page == "Snel Overzicht":
     st.write("")
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
-    st.write("Gebruik het dropdownmenu om de verschillende pagina's te bezoeken.")
+    st.write("Gebruik het dropdown menu om de verschillende pagina's te bezoeken.")
     st.write("")
     st.markdown("**Snel overzicht**")
     st.write("Hieronder zijn een aantal simpele KPI's (Key Performance Indicators) te zien.")
