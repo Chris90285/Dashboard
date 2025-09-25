@@ -62,7 +62,7 @@ with st.sidebar:
     st.markdown("---")
 
     # overige sidebar-elementen
-    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard","Vliegtuig vs Trein", "Data Overzicht", "Werkwijze"])
+    page = st.selectbox("Selecteer een pagina", ["Snel Overzicht", "Dashboard","Vliegtuig vs Trein", "Data Overzicht", "Toelichting"])
 
     # witregel
     st.write("")  
@@ -731,8 +731,8 @@ elif page == "Data Overzicht":
 
 #-------------------page 5-----------------------------
 #-------------------------------------------------------
-elif page == "Werkwijze":
-    st.markdown(f"<h1 style='color:{primary_color}'>✎ Werkwijze</h1>", unsafe_allow_html=True)
+elif page == "Toelichting":
+    st.markdown(f"<h1 style='color:{primary_color}'>✎ Toelichting</h1>", unsafe_allow_html=True)
     st.write("")
     st.markdown("""
     ### Introductie
@@ -763,7 +763,7 @@ elif page == "Werkwijze":
 
     ---
 
-    #### 🚄 Japanse treinen
+    ####  Japanse treinen
 
     **Dataset:**  
     Bevat informatie over reizigerservaringen, met nadruk op comfort, punctualiteit en tevredenheid.
