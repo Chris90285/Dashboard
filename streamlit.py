@@ -603,57 +603,70 @@ elif page == "Dashboard":
     st.title("Voorspelling van klanttevredenheid")
 
 
-    # Filters
-    classes = ["Alle Klassen"] + df["Class"].dropna().unique().tolist()
-    selected_class = st.selectbox("Kies een klasse:", classes)
-    filtered = df.copy()
+    # Maak een kopie zodat we het originele df niet aanpassen
+    df_model = df.copy()
+
+    # Feature engineering
+    df_model["Is_Delayed"] = (df_model["Total Delay"] > 15).astype(int)
+    df_model["Satisfied"] = (df_model["Satisfaction_Avg"] >= 4).astype(int)
+
+    # --- Filters voor model ---
+    st.markdown("### Filters voor model")
+
+    # Klasse filter
+    classes = ["Alle Klassen"] + df_model["Class"].dropna().unique().tolist()
+    selected_class = st.selectbox("Kies een klasse:", classes, key="model_class")
+
     if selected_class != "Alle Klassen":
-        filtered = filtered[filtered["Class"] == selected_class]
-
-    genders = ["Alle Geslachten"] + filtered["Gender"].dropna().unique().tolist()
-    selected_gender = st.selectbox("Kies een geslacht:", genders)
-    if selected_gender != "Alle Geslachten":
-        filtered = filtered[filtered["Gender"] == selected_gender]
-
-    age_range = st.slider(
-        "Leeftijdsbereik:",
-        int(filtered["Age"].min()),
-        int(filtered["Age"].max()),
-        (int(filtered["Age"].min()), int(filtered["Age"].max()))
-    )
-    filtered = filtered[(filtered["Age"] >= age_range[0]) & (filtered["Age"] <= age_range[1])]
-
-    delay_threshold = st.slider(
-        "Minimale vertraging (minuten):",
-        0,
-        int(filtered["Total Delay"].max()),
-        0
-    )
-    filtered = filtered[filtered["Total Delay"] >= delay_threshold]
-
-    st.write(f"Aantal passagiers na filtering: {len(filtered)}")
-
-    # Simpele voorspellingsregel
-    def predict_satisfaction(row):
-        score = 0
-        if row["Age"] > 50:
-            score += 1
-        if row["Flight Distance"] > 1000:
-            score -= 1
-        if row["Total Delay"] > 30:
-            score -= 1
-        return "Tevreden" if score >= 0 else "Niet tevreden"
-
-    if not filtered.empty:
-        filtered["Voorspelling"] = filtered.apply(predict_satisfaction, axis=1)
-        st.write("Voorbeelden voorspellingen:")
-        st.dataframe(
-            filtered[["Class", "Gender", "Age", "Flight Distance", "Total Delay", "Voorspelling"]].head(20)
-        )
+        df_filtered = df_model[df_model["Class"] == selected_class].copy()
     else:
-        st.warning("Geen data beschikbaar na filtering.")
+        df_filtered = df_model.copy()
 
+    # Geslacht filter
+    genders = ["Alle Geslachten"] + df_filtered["Gender"].dropna().unique().tolist()
+    selected_gender = st.selectbox("Kies een geslacht:", genders, key="model_gender")
+    if selected_gender != "Alle Geslachten":
+        df_filtered = df_filtered[df_filtered["Gender"] == selected_gender].copy()
 
+    # Leeftijd filter
+    min_age, max_age = int(df_filtered["Age"].min()), int(df_filtered["Age"].max())
+    age_range = st.slider("Leeftijdsbereik:", min_age, max_age, (min_age, max_age), key="model_age")
+    df_filtered = df_filtered[(df_filtered["Age"] >= age_range[0]) & (df_filtered["Age"] <= age_range[1])]
+
+    # Vertraging filter
+    max_delay = int(df_filtered["Total Delay"].max())
+    delay_threshold = st.slider("Minimale vertraging (minuten):", 0, max_delay, 0, key="model_delay")
+    df_filtered = df_filtered[df_filtered["Total Delay"] >= delay_threshold]
+
+    # --- Model training ---
+    features = ["Age", "Flight Distance", "Is_Delayed"]
+    X = df_filtered[features]
+    y = df_filtered["Satisfied"]
+
+    if len(df_filtered) < 10:
+        st.warning("Te weinig data na filtering om een model te trainen.")
+    else:
+        from sklearn.model_selection import train_test_split
+        from sklearn.linear_model import LogisticRegression
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+        model = LogisticRegression()
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+
+        # Confusion matrix
+        st.subheader("Confusion Matrix")
+        cm_data = pd.crosstab(y_test, y_pred, rownames=["Actual"], colnames=["Predicted"])
+        st.dataframe(cm_data)
+
+        # Feature impact
+        st.subheader("Feature impact")
+        coef_data = pd.DataFrame({
+            "Feature": features,
+            "Coefficient": model.coef_[0]
+        }).sort_values(by="Coefficient", key=abs, ascending=False)
+        st.bar_chart(coef_data.set_index("Feature")["Coefficient"])
 
 
 #-------------------page 3-----------------------------
