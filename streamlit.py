@@ -600,73 +600,48 @@ elif page == "Dashboard":
 
     #-------------------Voorspellend model--------------------
     #---------------------------------------------------------
+    # Title
     st.title("Voorspelling van klanttevredenheid")
 
-
-    # Maak een kopie zodat we het originele df niet aanpassen
+    # Maak een kopie van df
     df_model = df.copy()
 
     # Feature engineering
     df_model["Is_Delayed"] = (df_model["Total Delay"] > 15).astype(int)
+    df_model = df_model.dropna(subset=["Satisfaction_Avg"])
     df_model["Satisfied"] = (df_model["Satisfaction_Avg"] >= 4).astype(int)
 
-    # --- Filters voor model ---
-    st.markdown("### Filters voor model")
-
-    # Klasse filter
+    # --------------------
+    # Afhankelijke dropdowns
+    # --------------------
     classes = ["Alle Klassen"] + df_model["Class"].dropna().unique().tolist()
-    selected_class = st.selectbox("Kies een klasse:", classes, key="model_class")
+    selected_class = st.selectbox("Kies een klasse:", classes, key="class_model")
 
+    # Filteren op klasse
     if selected_class != "Alle Klassen":
-        df_filtered = df_model[df_model["Class"] == selected_class].copy()
+        df_filtered_model = df_model[df_model["Class"] == selected_class]
     else:
-        df_filtered = df_model.copy()
+        df_filtered_model = df_model.copy()
 
-    # Geslacht filter
-    genders = ["Alle Geslachten"] + df_filtered["Gender"].dropna().unique().tolist()
-    selected_gender = st.selectbox("Kies een geslacht:", genders, key="model_gender")
+    # Geslacht dropdown afhankelijk van klasse
+    genders = ["Alle Geslachten"] + df_filtered_model["Gender"].dropna().unique().tolist()
+    selected_gender = st.selectbox("Kies een geslacht:", genders, key="gender_model")
+
     if selected_gender != "Alle Geslachten":
-        df_filtered = df_filtered[df_filtered["Gender"] == selected_gender].copy()
+        df_filtered_model = df_filtered_model[df_filtered_model["Gender"] == selected_gender]
 
     # Leeftijd filter
-    min_age, max_age = int(df_filtered["Age"].min()), int(df_filtered["Age"].max())
-    age_range = st.slider("Leeftijdsbereik:", min_age, max_age, (min_age, max_age), key="model_age")
-    df_filtered = df_filtered[(df_filtered["Age"] >= age_range[0]) & (df_filtered["Age"] <= age_range[1])]
+    min_age = int(df_filtered_model["Age"].min())
+    max_age = int(df_filtered_model["Age"].max())
+    age_range = st.slider("Leeftijdsbereik:", min_age, max_age, (min_age, max_age))
+    df_filtered_model = df_filtered_model[(df_filtered_model["Age"] >= age_range[0]) & (df_filtered_model["Age"] <= age_range[1])]
 
-    # Vertraging filter
-    max_delay = int(df_filtered["Total Delay"].max())
-    delay_threshold = st.slider("Minimale vertraging (minuten):", 0, max_delay, 0, key="model_delay")
-    df_filtered = df_filtered[df_filtered["Total Delay"] >= delay_threshold]
-
-    # --- Model training ---
-    features = ["Age", "Flight Distance", "Is_Delayed"]
-    X = df_filtered[features]
-    y = df_filtered["Satisfied"]
-
-    if len(df_filtered) < 10:
-        st.warning("Te weinig data na filtering om een model te trainen.")
+    # Simpel model: kans dat passagier tevreden is
+    if len(df_filtered_model) == 0:
+        st.warning("Geen data beschikbaar voor deze selectie.")
     else:
-        from sklearn.model_selection import train_test_split
-        from sklearn.linear_model import LogisticRegression
-
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-        model = LogisticRegression()
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-
-        # Confusion matrix
-        st.subheader("Confusion Matrix")
-        cm_data = pd.crosstab(y_test, y_pred, rownames=["Actual"], colnames=["Predicted"])
-        st.dataframe(cm_data)
-
-        # Feature impact
-        st.subheader("Feature impact")
-        coef_data = pd.DataFrame({
-            "Feature": features,
-            "Coefficient": model.coef_[0]
-        }).sort_values(by="Coefficient", key=abs, ascending=False)
-        st.bar_chart(coef_data.set_index("Feature")["Coefficient"])
+        prob_satisfied = df_filtered_model["Satisfied"].mean()
+        st.write(f"Op basis van de geselecteerde filters is de kans dat een passagier tevreden is: **{prob_satisfied:.2f}**")
 
 
 #-------------------page 3-----------------------------
