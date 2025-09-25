@@ -82,7 +82,7 @@ with st.sidebar:
     st.write("")
 
     # Voeg laatst geupdate datum toe
-    st.write("Voor het laatst geupdate op:")
+    st.write("Voor het laatst geüpdatet op:")
     st.write("*15:56 - 25 sep 2025*")
 
 #-------------------stijlinstellingen-------------------
@@ -115,7 +115,7 @@ if page == "Snel Overzicht":
     st.write("")
     st.markdown("**Welkom!**")
     st.write("Op dit dashboard vind je uitgebreide informatie over de tevredenheid van klanten van KLM.")
-    st.write("Gebruik het dropdown menu om de verschillende pagina's te bezoeken.")
+    st.write("Gebruik het dropdownmenu om de verschillende pagina's te bezoeken.")
     st.write("")
     st.markdown("**Snel overzicht**")
     st.write("Hieronder zijn een aantal simpele KPI's (Key Performance Indicators) te zien.")
@@ -806,8 +806,8 @@ elif page == "Data Overzicht":
     st.write("### Trein")
     st.write("Hieronder is het dataframe *Surveydata_test_(1).csv* te zien:")
     st.write("Wissel met het dropdown menu tussen het originele en het aangepaste dataset.")
-    st.write("Zoals te zien is zijn de waardes omgezet naar een score tussen 0 en 5, waardoor er vergeleken kan worden met de scores van vliegtuigen.")
-    st.write("Missende waardes zijn opgevuld met de mediaan van die kolom.")
+    st.write("Zoals te zien is zijn de waarden omgezet naar een score tussen 0 en 5, waardoor er vergeleken kan worden met de scores van vliegtuigen.")
+    st.write("Missende waarden zijn opgevuld met de mediaan van die kolom.")
     # Dropdown om te kiezen welk dataframe te tonen
     selected_df = st.selectbox(
         "Kies een dataset om te bekijken:",
