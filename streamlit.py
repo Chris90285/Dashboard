@@ -693,6 +693,45 @@ elif page == "Vliegtuig vs Trein":
 
             st.altair_chart(chart, use_container_width=True)
 
+
+    #--------------Radar chart vergelijking -----------------
+    #---------------------------------------------------------
+    if not results_df.empty:
+        # Titel
+        st.title("Tevredenheid per categorie - Vliegtuig vs Trein als Radarchart")
+
+        # Pivoteren zodat we per dataset een rij hebben
+        radar_df = results_df.pivot(index="Dataset", columns="Aspect", values="Score")
+
+        categories = radar_df.columns.tolist()
+
+        fig_radar = go.Figure()
+
+        for dataset in radar_df.index:
+            values = radar_df.loc[dataset].tolist()
+            # Sluit de cirkel
+            values += values[:1]
+            categories_closed = categories + [categories[0]]
+
+            fig_radar.add_trace(go.Scatterpolar(
+                r=values,
+                theta=categories_closed,
+                fill='toself',
+                name=dataset
+            ))
+
+        fig_radar.update_layout(
+            polar=dict(
+                radialaxis=dict(
+                    visible=True,
+                    range=[0, 5]
+                )
+            ),
+            showlegend=True
+        )
+
+        st.plotly_chart(fig_radar, use_container_width=True)
+
 #-------------------page 4-----------------------------
 #-------------------------------------------------------
 elif page == "Data Overzicht":
