@@ -726,8 +726,8 @@ elif page == "Vliegtuig vs Trein":
                 )
             ),
             showlegend=True,
-            width=800,
-            height=800
+            width=600,
+            height=600
         )
 
         st.plotly_chart(fig_compare_radar, use_container_width=True)
