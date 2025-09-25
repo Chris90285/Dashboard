@@ -850,13 +850,14 @@ elif page == "Toelichting":
     - KPI-indicatoren: totaal passagiers, gemiddelde tevredenheid, vertrek- en aankomstvertragingen, percentage vertraagde vluchten.
     - Histogram – Tevredenheid: verdeling van scores bij KLM-vluchten.
     - Scatterplot vertraging: Arrival vs Departure Delay, gekleurd op gemiddelde rating.
-
+                
     **Voorspellend model:**  
-    Er is een simpel voorspellend model gemaakt dat de kans berekent dat een passagier tevreden is (Satisfaction_Avg ≥ 3.5).  
-    - Feature engineering:  
-    - `Is_Delayed` = 1 als totale vertraging > 15 minuten, anders 0.  
-    - Filters voor klasse, geslacht, leeftijd en totale vertraging.  
-    - Output: kans op tevredenheid gebaseerd op de geselecteerde filters.
+    -Het model berekent de kans dat een passagier tevreden is (Satisfaction_Avg ≥ 3.5).
+    -Feature engineering:
+    Is_Delayed = 1 als de passagier meer dan 15 minuten vertraging had, anders 0.
+    Het model houdt rekening met klasse, geslacht, leeftijd en totale vertraging.
+    -Output:
+    Toont de kans op tevredenheid voor de passagiers die voldoen aan de gekozen filters.
 
     ---
 
