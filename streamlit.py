@@ -24,16 +24,16 @@ df = load_data()
 #Extra data set
 @st.cache_data
 def load_extra_data():
-    df_extra = pd.read_csv("Surveydata_train_(1)_(1).csv")
+    df_extra = pd.read_csv("Surveydata_test_(1).csv")
     return df_extra
 
 df_extra = load_extra_data()
 
 #Aangepast train data set
 @st.cache_data
-def load_extra_data():
+def load_extra_aangepast_data():
     df_extra_aangepast = pd.read_csv("Train_Japan_Opgeschoond.csv")
-    return df_extra
+    return df_extra_aangepast
 
 df_extra_aangepast = load_extra_data()
 
@@ -526,7 +526,7 @@ elif page == "Data Overzicht":
     st.write("")
     st.write("")
 
-    st.write("Hieronder is het dataframe *Surveydata_train_(1)_(1).csv* te zien:")
+    st.write("Hieronder is het dataframe *Surveydata_test_(1).csv* te zien:")
     st.write("Wissel met het dropdown menu tussen het originele en het aanghepaste dataset.")
     # Dropdown om te kiezen welk dataframe te tonen
     selected_df = st.selectbox(
